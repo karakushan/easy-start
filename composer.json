@@ -1,0 +1,22 @@
+{
+    "name": "karak/easy-start",
+    "authors": [
+        {
+            "name": "Vitaliy Karakushan",
+            "email": "karakushan@gmail.com"
+        }
+    ],
+    "autoload":{
+    	"psr-4": {
+            "ES_LIB\\": "lib/"
+        }, 
+    	"files":[
+    		"functions/functions.php",
+            "functions/filters.php",
+    		"functions/customizer.php"
+    	]
+    },
+    "require": {
+
+    }
+}

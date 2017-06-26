@@ -1,0 +1,150 @@
+{
+  "custom_post": {
+    "reviews": {
+      "label": "Отзывы",
+      "public": true,
+      "supports": [
+        "title",
+        "editor"
+      ]
+    }
+  },
+  "meta_boxes": {
+    "1": {
+      "name": "Дополнительные поля отзывов",
+      "post_types": [
+        "reviews"
+      ],
+      "context": "normal",
+      "display": 1,
+      "post_meta": {
+        "rev-pos": {
+          "name": "Должность",
+          "type": "text",
+          "desc": "В трёх словах"
+        },
+        "review-image": {
+          "name": "Фото",
+          "type": "image",
+          "desc": "Фотография давшего отзыв"
+        }
+      }
+    }
+  },
+  "customizer": {
+    "section_social": {
+      "title": "Социальные сети",
+      "settings": {
+        "vk-page": {
+          "default": "",
+          "name": "Ссылка на профиль Вконтакте",
+          "type": "text"
+        },
+        "fb-page": {
+          "default": "",
+          "name": "Ссылка на профиль Facebook",
+          "type": "text"
+        },
+        "tw-page": {
+          "default": "",
+          "name": "Ссылка на профиль Twitter",
+          "type": "text"
+        },
+        "gp-page": {
+          "default": "",
+          "name": "Ссылка на профиль Google+",
+          "type": "text"
+        }
+      }
+    },
+    "section_contacts": {
+      "title": "Контакты",
+      "settings": {
+        "phone": {
+          "default": 1234567890,
+          "name": "Телефон",
+          "type": "text"
+        },
+        "email": {
+          "default": "admin@gmail.com",
+          "name": "E-mail ",
+          "type": "text"
+        },
+        "company-adress": {
+          "default": "48100 г. Киев ул. Шевченко 34",
+          "name": "Адрес",
+          "type": "text"
+        },
+        "work-schedule": {
+          "default": "Пн-пт с 9:00-18:00",
+          "name": "Время работы",
+          "type": "text"
+        }
+      }
+    },
+    "section_footer": {
+      "title": "Подвал сайта",
+      "settings": {
+        "copywrite": {
+          "default": "© 2010-2016",
+          "name": "Копирайты",
+          "type": "text"
+        }
+      }
+    }
+  },
+  "taxonomies": {
+    "category-review": {
+      "post_types": [
+        "reviews"
+      ],
+      "label": "Категории отзывов",
+      "hierarchical": true
+    }
+  },
+  "term_meta": {
+    "category": {
+      "cat-text": {
+        "name": "Основной текст",
+        "type": "editor",
+        "desc": "Поле для ввода СЕО текста"
+      }
+    },
+    "category-review": {
+      "cat-taxonomy-text": {
+        "name": "Основной текст",
+        "type": "editor",
+        "desc": "Поле для ввода СЕО текста"
+      },
+      "cat-seo-text": {
+        "name": "СЕО текст",
+        "type": "editor",
+        "desc": "Если оставить пустым, блок не будет отображаться"
+      },
+      "cat-faq-off": {
+        "name": "Скрыть блок FAQ",
+        "type": "checkbox",
+        "desc": "",
+        "default": ""
+      },
+      "cat-faq": {
+        "name": "Прикреплённая категория FAQ",
+        "type": "taxonomy",
+        "taxonomy": "faq-category",
+        "desc": "нужно выбрать из списка",
+        "default": 2
+      },
+      "cat-image": {
+        "name": "Иконка категории",
+        "type": "image",
+        "desc": "Поле для загрузки изображений"
+      },
+      "service-thumbnail": {
+        "name": "Изображение категории",
+        "type": "image",
+        "desc": "Поле для загрузки изображений"
+      }
+    }
+  },
+  "show_admin_menu": true
+}

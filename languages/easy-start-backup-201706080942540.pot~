@@ -1,0 +1,133 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Easy start\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-06-08 09:41+0000\n"
+"POT-Revision-Date: Mon Aug 22 2016 11:54:56 GMT+0300 (RTZ 2 (зима))\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ..\n"
+"X-Poedit-KeywordsList: _:1;gettext:1;dgettext:2;ngettext:1,2;dngettext:2,3;"
+"__:1;_e:1;_c:1;_n:1,2;_n_noop:1,2;_nc:1,2;__ngettext:1,2;__ngettext_noop:1,2;"
+"_x:1,2c;_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;"
+"esc_attr__:1;esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;"
+"esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
+"X-Generator: Loco - https://localise.biz/"
+
+#: functions/filters.php:39
+msgid "edit post"
+msgstr ""
+
+#: functions/filters.php:42
+msgid "edit page"
+msgstr ""
+
+#: functions/filters.php:45 functions/functions.php:35
+msgid "edit block"
+msgstr ""
+
+#: functions/filters.php:48
+msgid "edit product"
+msgstr ""
+
+#: functions/functions.php:404
+msgid "Please Select"
+msgstr ""
+
+#: lib/ES_ctypes.php:24 lib/ES_ctypes.php:26 lib/ES_ctypes.php:48
+msgid "Blocks"
+msgstr ""
+
+#: lib/ES_ctypes.php:28
+msgid "Block"
+msgstr ""
+
+#: lib/ES_ctypes.php:30 lib/ES_ctypes.php:32
+msgid "Add Block"
+msgstr ""
+
+#: lib/ES_ctypes.php:34
+msgid "Edit Block"
+msgstr ""
+
+#: lib/ES_ctypes.php:36
+msgid "Block title"
+msgstr ""
+
+#: lib/ES_ctypes.php:38
+msgid "View Block"
+msgstr ""
+
+#: lib/ES_ctypes.php:82
+msgid "Categories blocks"
+msgstr ""
+
+#: lib/ES_init.php:54 lib/ES_init.php:54
+#: templates/easy-start-import-export.php:2
+msgid "Export"
+msgstr ""
+
+#: templates/field/accordion.php:5 templates/field/accordion.php:27
+#: templates/field/gallery.php:8 templates/field/slider.php:17
+msgid "remove"
+msgstr ""
+
+#: templates/field/accordion.php:6 templates/field/accordion.php:26
+msgid "Section"
+msgstr ""
+
+#: templates/field/accordion.php:10 templates/field/accordion.php:28
+#: templates/field/accordion.php:31
+msgid "Section title"
+msgstr ""
+
+#: templates/field/accordion.php:15 templates/field/accordion.php:36
+msgid "Section subtitle"
+msgstr ""
+
+#: templates/field/accordion.php:20 templates/field/accordion.php:41
+msgid "Section text"
+msgstr ""
+
+#: templates/field/accordion.php:50
+msgid "Add new section"
+msgstr ""
+
+#: templates/field/gallery.php:1
+msgid "Add images"
+msgstr ""
+
+#: templates/field/gallery.php:8 templates/field/slider.php:17
+msgid "Delete image"
+msgstr ""
+
+#: templates/field/image.php:9
+msgid "Add"
+msgstr ""
+
+#. Name of the plugin
+msgid "Easy start"
+msgstr ""
+
+#. Description of the plugin
+msgid ""
+"Create your own post types, taxonomies, additional fields, topic settings "
+"using the json file."
+msgstr ""
+
+#. URI of the plugin
+msgid "http://wordpress.org/extend/plugins/easy-start/"
+msgstr ""
+
+#. Author of the plugin
+msgid "Vitaliy Karakushan"
+msgstr ""
