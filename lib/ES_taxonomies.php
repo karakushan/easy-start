@@ -29,7 +29,7 @@ class Es_taxonomies
             }
         }
 
-        //Если есть таксономии для регистраиции, то создаём их
+        //Если есть таксономии для регистрации, то создаём их
         if ($taxonomies) {
             foreach ($taxonomies as $key => $taxonomy) {
                 register_taxonomy($key, $taxonomy['post_types'], $taxonomy);
@@ -123,6 +123,7 @@ class Es_taxonomies
                         } else {
                             $field_name = $key;
                             $content = get_term_meta($term->term_id, $field_name, 1);
+	                        $content=wp_unslash( $content);
                             // если значение мета поля пустое
                             if (empty($content)) {
                                 if (isset($field['default']) && $field['default'] == 'es_block') {
@@ -151,6 +152,9 @@ class Es_taxonomies
                                 case 'image':
                                     es_field_template($field['type'], $field_name, $content);
                                     break;
+	                            case 'gallery':
+		                            es_field_template( $field['type'], $field_name, $content );
+		                            break;
                                 case 'checkbox' :
                                     es_field_template($field['type'], $field_name, $content);
                                     break;
@@ -200,11 +204,11 @@ class Es_taxonomies
             }
         } else {
             foreach ($fields as $key => $value) {
-                if (empty($value)) {
+                if (empty($_POST['easy'][ $key ])) {
                     delete_term_meta($term_id, $key);
                     continue;
                 }
-                update_term_meta($term_id, $key, $extra[$key]);
+                update_term_meta($term_id, $key,  wp_slash( $_POST['easy'][ $key ] ));
             }
         }
 
