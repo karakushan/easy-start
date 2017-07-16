@@ -175,6 +175,7 @@ function es_term_meta( $key, $term_id = 0, $args = array() ) {
 		'default'  => '',
 		'raw'      => true,
 		'echo'     => true,
+		'size'=>'large',
 		'es_block' => 0
 	) );
 
@@ -191,6 +192,16 @@ function es_term_meta( $key, $term_id = 0, $args = array() ) {
 			$term_id      = get_term_meta( $term_id, $lang_key, 1 );
 			$term_meta    = get_term_by( 'term_taxonomy_id', $term_id );
 			$args['echo'] = false;
+			break;
+		case "gallery":
+			$post_meta      = get_term_meta( $term_id, $lang_key, 0 );
+			$gallery_images = ! empty( $post_meta[0] ) ? $post_meta[0] : array();
+			$meta_img       = array();
+			foreach ( $gallery_images as $k => $images ) {
+				$meta_img[ $k ] = wp_get_attachment_image_url( $images, $args['size'] );
+			}
+			$term_meta   = $meta_img;
+			$args['echo'] = 0;
 			break;
 		default:
 			$term_meta = get_term_meta( $term_id, $lang_key, 1 );
