@@ -147,7 +147,7 @@ class ES_ctypes {
 					foreach ( $meta_fields as $key => $field ) {
 						$field_name = es_field_prefix( $key, $lang_key );
 						$editor_id  = mb_strtolower( str_replace( array( '_' ), array( '-' ), $field_name ) );
-						$content    = wp_unslash( htmlspecialchars_decode( get_post_meta( $post->ID, $field_name, 1 ) ) );
+						$content    = wp_unslash(esc_html(get_post_meta( $post->ID, $field_name, 1 )));
 						echo "<div class='es_meta_field'>";
 						echo "<div class='es_field_label'><strong>" . $field['name'] . " (" . $language['name'] . ")</strong></div>";
 						echo "<div class='es_field_desc'><em>" . $field['desc'] . "</em></div>";
@@ -271,7 +271,7 @@ class ES_ctypes {
 
 					}
 
-					$content = wp_unslash( $content );
+					$content    = wp_unslash(esc_html($content));
 
 					echo "<div class='es_meta_field es-meta-" . $field['type'] . "'>";
 					echo "<div class='es_field_label'><strong>" . $field['name'] . "</strong></div>";
@@ -394,7 +394,7 @@ class ES_ctypes {
 					) {
 						delete_post_meta( $postID, $field_name );
 					} else {
-						update_post_meta( $postID, $field_name, wp_slash( $_POST['easy'][ $meta_key ] ) );
+						update_post_meta( $postID, $field_name, wp_specialchars_decode( $_POST['easy'][ $meta_key ],ENT_QUOTES ) );
 					}
 				}
 			}
@@ -405,7 +405,7 @@ class ES_ctypes {
 				) {
 					delete_post_meta( $postID, $meta_key );
 				} else {
-					update_post_meta( $postID, $meta_key, wp_slash( $_POST['easy'][ $meta_key ] ) );
+					update_post_meta( $postID, $meta_key, wp_specialchars_decode( $_POST['easy'][ $meta_key ],ENT_QUOTES ) );
 				}
 			}
 		}

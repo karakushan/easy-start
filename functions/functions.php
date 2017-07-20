@@ -270,7 +270,7 @@ function es_post_meta( $meta_key, $post_id = 0, $args = array() ) {
 		}
 	}
 
-	$meta_value = wp_unslash( $meta_value ); // убираем слеши
+	$meta_value = wp_unslash( $meta_value); // убираем слеши
 	//Если пустое значение мета поля или равно false возвращаем значение заданное в $default
 	if ( empty( $meta_value ) ) {
 		$meta_value = $args['default'];
