@@ -389,12 +389,12 @@ class ES_ctypes {
 			foreach ( $languages as $lang_key => $lang ) {
 				foreach ( $post_meta as $meta_key => $meta_value ) {
 					$field_name = es_field_prefix( $meta_key, $lang_key );
-					if ( ( empty( $_POST['easy'][ $meta_key ] ) || ! isset( $_POST['easy'][ $meta_key ] ) )
+					if ( ( empty( $_POST['easy'][ $meta_key ] ) || ! isset( $_POST['easy'][ $field_name ] ) )
 					     && $post_meta[ $meta_key ]['type'] != 'checkbox'
 					) {
 						delete_post_meta( $postID, $field_name );
 					} else {
-						update_post_meta( $postID, $field_name, wp_specialchars_decode( $_POST['easy'][ $meta_key ],ENT_QUOTES ) );
+						update_post_meta( $postID, $field_name, wp_specialchars_decode( $_POST['easy'][ $field_name ],ENT_QUOTES ) );
 					}
 				}
 			}
