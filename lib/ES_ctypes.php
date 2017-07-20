@@ -210,6 +210,19 @@ class ES_ctypes {
 								}
 								echo '</select>';
 								break;
+							case 'date':
+								echo '<input type="date"  name="easy[' . $field_name . ']" id="' . $editor_id . '" class="es_text" value="' . $content . '" style="width:150px">';
+								break;
+
+							case 'time':
+								echo '<input type="time"  name="easy[' . $field_name . ']" id="' . $editor_id . '" class="es_text" value="' . $content . '" style="width:150px">';
+								break;
+							case 'week':
+								echo '<input type="week"  name="easy[' . $field_name . ']" id="' . $editor_id . '" class="es_text" value="' . $content . '" style="width:150px">';
+								break;
+							case 'file' :
+								es_field_template( $field['type'], $field_name, $content );
+								break;
 
 							default:
 								echo '<input type="text"  name="easy[' . $field_name . ']" id="' . $editor_id . '" class="es_text" value="' . $content . '">';
@@ -287,7 +300,7 @@ class ES_ctypes {
 						case 'image' :
 							es_field_template( $field['type'], $field_name, $content );
 							break;
-							case 'file' :
+						case 'file' :
 							es_field_template( $field['type'], $field_name, $content );
 							break;
 						case 'taxonomy' :

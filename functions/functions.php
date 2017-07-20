@@ -37,7 +37,7 @@ function es_block( $block_id = 0, $type = 'text', $context = 'display' ) {
 
 	foreach ( $es_posts as $es_post ) {
 		$content = sanitize_post_field( 'post_content', $es_post->post_content, $block_id, $context );
-		echo $content;
+		echo apply_filters( 'the_content', $content );
 	}
 	if ( current_user_can( 'edit_posts' ) ) {
 		echo "</div>";
@@ -175,7 +175,7 @@ function es_term_meta( $key, $term_id = 0, $args = array() ) {
 		'default'  => '',
 		'raw'      => true,
 		'echo'     => true,
-		'size'=>'large',
+		'size'     => 'large',
 		'es_block' => 0
 	) );
 
@@ -200,7 +200,7 @@ function es_term_meta( $key, $term_id = 0, $args = array() ) {
 			foreach ( $gallery_images as $k => $images ) {
 				$meta_img[ $k ] = wp_get_attachment_image_url( $images, $args['size'] );
 			}
-			$term_meta   = $meta_img;
+			$term_meta    = $meta_img;
 			$args['echo'] = 0;
 			break;
 		default:
@@ -244,12 +244,13 @@ function es_post_meta( $meta_key, $post_id = 0, $args = array() ) {
 	$post_id = empty( $post_id ) ? $post->ID : (int) $post_id;
 
 	$defaults = array(
-		'default'  => '',
-		'type'     => 'text',
-		'es_block' => '',
-		'raw'      => true,
-		'echo'     => true,
-		'filter'   => false
+		'default'     => '',
+		'type'        => 'text',
+		'es_block'    => '',
+		'raw'         => true,
+		'echo'        => true,
+		'filter'      => false,
+		'date_format' => 'd.m.Y'
 	);
 	$args     = wp_parse_args( $args, $defaults );
 
@@ -290,6 +291,9 @@ function es_post_meta( $meta_key, $post_id = 0, $args = array() ) {
 		case "post":
 			$post_meta    = get_post( $meta_value );
 			$args['echo'] = 0;
+			break;
+		case "date":
+			$post_meta    = date($args['date_format'],strtotime($meta_value));
 			break;
 		case "accordion":
 			$post_meta    = get_post_meta( $post_id, es_field_prefix( $meta_key ), 0 );
