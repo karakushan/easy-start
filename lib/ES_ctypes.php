@@ -147,7 +147,7 @@ class ES_ctypes {
 					foreach ( $meta_fields as $key => $field ) {
 						$field_name = es_field_prefix( $key, $lang_key );
 						$editor_id  = mb_strtolower( str_replace( array( '_' ), array( '-' ), $field_name ) );
-						$content    = wp_unslash(esc_html(get_post_meta( $post->ID, $field_name, 1 )));
+						$content    = wp_unslash( get_post_meta( $post->ID, $field_name, 1 ) );
 						echo "<div class='es_meta_field'>";
 						echo "<div class='es_field_label'><strong>" . $field['name'] . " (" . $language['name'] . ")</strong></div>";
 						echo "<div class='es_field_desc'><em>" . $field['desc'] . "</em></div>";
@@ -192,7 +192,7 @@ class ES_ctypes {
 								break;
 
 							case 'text' :
-								echo '<input type="text"  name="easy[' . $field_name . ']" id="' . $editor_id . '" class="es_text" value="' . $content . '">';
+								echo '<input type="text"  name="easy[' . $field_name . ']" id="' . $editor_id . '" class="es_text" value="' . esc_html( $content ). '">';
 								break;
 
 							case 'taxonomy' :
@@ -225,7 +225,7 @@ class ES_ctypes {
 								break;
 
 							default:
-								echo '<input type="text"  name="easy[' . $field_name . ']" id="' . $editor_id . '" class="es_text" value="' . $content . '">';
+								echo '<input type="text"  name="easy[' . $field_name . ']" id="' . $editor_id . '" class="es_text" value="' . esc_html( $content ) . '">';
 								break;
 
 
@@ -271,7 +271,7 @@ class ES_ctypes {
 
 					}
 
-					$content    = wp_unslash(esc_html($content));
+					$content = wp_unslash( $content );
 
 					echo "<div class='es_meta_field es-meta-" . $field['type'] . "'>";
 					echo "<div class='es_field_label'><strong>" . $field['name'] . "</strong></div>";
@@ -314,7 +314,7 @@ class ES_ctypes {
 
 						case 'text' :
 							$content = esc_html__( $content );
-							echo '<input type="text"  name="easy[' . $key . ']" id="' . $editor_id . '" class="es_text" value="' . $content . '">';
+							echo '<input type="text"  name="easy[' . $key . ']" id="' . $editor_id . '" class="es_text" value="' . esc_html( $content ) . '">';
 							break;
 
 						case 'checkbox' :
@@ -359,7 +359,7 @@ class ES_ctypes {
 
 						default:
 							$content = esc_html__( $content );
-							echo '<input type="text"  name="easy[' . $key . ']" id="' . $editor_id . '" class="es_text" value="' . $content . '">';
+							echo '<input type="text"  name="easy[' . $key . ']" id="' . $editor_id . '" class="es_text" value="' . esc_html( $content ) . '">';
 							break;
 
 
@@ -394,7 +394,11 @@ class ES_ctypes {
 					) {
 						delete_post_meta( $postID, $field_name );
 					} else {
-						update_post_meta( $postID, $field_name, wp_specialchars_decode( $_POST['easy'][ $field_name ],ENT_QUOTES ) );
+						$content = wp_slash( $_POST['easy'][ $field_name ] );
+						if ( $post_meta[ $meta_key ]['type'] == "text" ) {
+							$content = wp_specialchars_decode( $_POST['easy'][ $field_name ], ENT_QUOTES );
+						}
+						update_post_meta( $postID, $field_name, $content );
 					}
 				}
 			}
@@ -405,7 +409,11 @@ class ES_ctypes {
 				) {
 					delete_post_meta( $postID, $meta_key );
 				} else {
-					update_post_meta( $postID, $meta_key, wp_specialchars_decode( $_POST['easy'][ $meta_key ],ENT_QUOTES ) );
+					$content = wp_slash( $_POST['easy'][ $meta_key ] );
+					if ( $post_meta[ $meta_key ]['type'] == "text" ) {
+						$content = wp_specialchars_decode( $_POST['easy'][ $meta_key ], ENT_QUOTES );
+					}
+					update_post_meta( $postID, $meta_key, $content );
 				}
 			}
 		}
