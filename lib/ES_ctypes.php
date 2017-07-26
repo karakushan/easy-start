@@ -327,8 +327,10 @@ class ES_ctypes {
 
 						case 'radio' :
 							if ( $field['values'] ) {
+								$f=0;
 								foreach ( $field['values'] as $field_key => $value ) {
-									echo '<input type="radio"  name="easy[' . $key . ']" id="' . $key . '-' . $field_key . '" value="' . $field_key . '" ' . checked( $content, 1, 0 ) . ' class="es_text"/><label for="' . $key . '-' . $field_key . '">' . $value . '</label>';
+									echo '<input type="radio"  name="easy[' . $key . ']" id="'.$key.'-'.$f.'"  value="' . $value. '" ' . checked( $content, $value, 0 ) . ' class="es_text"/><label for="'.$key.'-'.$f.'">' .$field_key. '</label>';
+								$f++;
 								}
 
 							}

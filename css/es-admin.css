@@ -21,7 +21,9 @@
     position: relative;
     box-shadow: 1px 1px 9px rgba(255, 255, 255, 0.49); }
     .es-gallery-wrapper .item:hover {
-      border: 1px solid #D32F2F; }
+      border: 1px solid #D32F2F;
+      cursor: move;
+      cursor: -webkit-grab; }
     .es-gallery-wrapper .item .es-image-delete {
       background: linear-gradient(#E53935, #F44336);
       color: #fff;

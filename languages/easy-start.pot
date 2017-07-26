@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Easy start\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-08 09:42+0000\n"
+"POT-Creation-Date: 2017-07-26 10:08+0000\n"
 "POT-Revision-Date: Mon Aug 22 2016 11:54:56 GMT+0300 (RTZ 2 (зима))\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
@@ -39,7 +39,7 @@ msgstr ""
 msgid "edit product"
 msgstr ""
 
-#: functions/functions.php:404
+#: functions/functions.php:423
 msgid "Please Select"
 msgstr ""
 
@@ -77,7 +77,7 @@ msgid "Export"
 msgstr ""
 
 #: templates/field/accordion.php:5 templates/field/accordion.php:27
-#: templates/field/gallery.php:8 templates/field/slider.php:17
+#: templates/field/gallery.php:11 templates/field/slider.php:17
 msgid "remove"
 msgstr ""
 
@@ -102,16 +102,32 @@ msgstr ""
 msgid "Add new section"
 msgstr ""
 
-#: templates/field/gallery.php:1
+#: templates/field/file.php:13 templates/field/image.php:13
+msgid "Add"
+msgstr ""
+
+#: templates/field/gallery.php:2
+msgid "You can drag and drop the images changing their position."
+msgstr ""
+
+#: templates/field/gallery.php:4
 msgid "Add images"
 msgstr ""
 
-#: templates/field/gallery.php:8 templates/field/slider.php:17
+#: templates/field/gallery.php:11 templates/field/slider.php:17
 msgid "Delete image"
 msgstr ""
 
-#: templates/field/image.php:9
-msgid "Add"
+#: templates/field/slider.php:2
+msgid "Add slider section"
+msgstr ""
+
+#: templates/field/slider.php:33
+msgid "Title"
+msgstr ""
+
+#: templates/field/slider.php:38
+msgid "Description"
 msgstr ""
 
 #. Name of the plugin
@@ -130,7 +146,4 @@ msgstr ""
 
 #. Author of the plugin
 msgid "Vitaliy Karakushan"
-msgstr ""
-
-msgid "Add slider section"
 msgstr ""

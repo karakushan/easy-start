@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Easy start\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-08 09:43+0000\n"
-"PO-Revision-Date: 2017-06-08 09:43+0000\n"
-"Last-Translator: ravon-admin <karakushan@gmail.com>\n"
+"POT-Creation-Date: 2017-07-26 10:08+0000\n"
+"PO-Revision-Date: 2017-07-26 10:09+0000\n"
+"Last-Translator: sharf-admin <karakushan@gmail.com>\n"
 "Language-Team: Russian\n"
 "Language: ru-RU\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10 >= 2 && "
@@ -23,6 +23,18 @@ msgstr ""
 "X-Generator: Loco - https://localise.biz/\n"
 "X-Loco-Target-Locale: ru_RU"
 
+#: templates/field/gallery.php:2
+msgid "You can drag and drop the images changing their position."
+msgstr "Вы можете перетаскивать изображения меняя их положение."
+
+#: templates/field/slider.php:33
+msgid "Title"
+msgstr ""
+
+#: templates/field/slider.php:38
+msgid "Description"
+msgstr ""
+
 #. Name of the plugin
 msgid "Easy start"
 msgstr ""
@@ -34,9 +46,6 @@ msgstr ""
 #. Author of the plugin
 msgid "Vitaliy Karakushan"
 msgstr ""
-
-msgid "Add slider section"
-msgstr "Добавить секцию слайдера"
 
 #: functions/filters.php:39
 msgid "edit post"
@@ -54,7 +63,7 @@ msgstr "изменить блок"
 msgid "edit product"
 msgstr "редактировать товар"
 
-#: functions/functions.php:404
+#: functions/functions.php:423
 msgid "Please Select"
 msgstr "Выберите пожалуйста"
 
@@ -92,7 +101,7 @@ msgid "Export"
 msgstr "Экспорт"
 
 #: templates/field/accordion.php:5 templates/field/accordion.php:27
-#: templates/field/gallery.php:8 templates/field/slider.php:17
+#: templates/field/gallery.php:11 templates/field/slider.php:17
 msgid "remove"
 msgstr "удалить"
 
@@ -117,17 +126,21 @@ msgstr "Текст секции"
 msgid "Add new section"
 msgstr "Добавить секцию"
 
-#: templates/field/gallery.php:1
+#: templates/field/file.php:13 templates/field/image.php:13
+msgid "Add"
+msgstr "Добавить"
+
+#: templates/field/gallery.php:4
 msgid "Add images"
 msgstr "Добавить изображения"
 
-#: templates/field/gallery.php:8 templates/field/slider.php:17
+#: templates/field/gallery.php:11 templates/field/slider.php:17
 msgid "Delete image"
 msgstr "Удалить изображение"
 
-#: templates/field/image.php:9
-msgid "Add"
-msgstr "Добавить"
+#: templates/field/slider.php:2
+msgid "Add slider section"
+msgstr "Добавить секцию слайдера"
 
 #. Description of the plugin
 msgid ""

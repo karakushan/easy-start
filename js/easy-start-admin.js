@@ -170,6 +170,6 @@ jQuery(function ($) {
             })
         })
     })
-
+    $(".es-gallery-wrapper").sortable();
 
 });
