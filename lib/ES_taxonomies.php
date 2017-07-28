@@ -47,7 +47,7 @@ class Es_taxonomies
 
         if (count($fields)):
             foreach ($fields as $key => $field): ?>
-                <tr class="form-field">
+                <tr class="form-field es_meta_field">
                     <th scope="row" valign="top"><label for="<?php echo $key ?>"><?php echo $field['name'] ?></label>
                     </th>
                     <td>

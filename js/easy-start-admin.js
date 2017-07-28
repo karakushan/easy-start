@@ -17,7 +17,12 @@ jQuery(function ($) {
         var button = $(this);
         wp.media.editor.send.attachment = function (props, attachment) {
             console.log(attachment)
-            $(button).parents('.es_meta_field').find('.file').html('<img src="' + attachment.sizes.thumbnail.url + '">').fadeIn();
+            if (typeof(attachment.sizes.thumbnail) == 'undefined') {
+                imageUrl = attachment.url;
+            }else{
+                imageUrl = attachment.sizes.thumbnail.url;
+            }
+            $(button).parents('.es_meta_field').find('.file').html('<img src="' + imageUrl + '">').fadeIn();
             $(button).prev().val(attachment.id);
             wp.media.editor.send.attachment = send_attachment_bkp;
         };
