@@ -2,21 +2,27 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
+
 /**
  * Функция выводит доступный для редактирования в фронтэнде блок из меню "Блоки"
  *
  * @param  integer $block_id - id блока
+ * @param  array $args - массив аргументов
  *
- * @return string            выводит текст блока
+ * @return string выводит текст блока
  */
-function es_block( $block_id = 0, $type = 'text', $context = 'display' ) {
-
+function es_block( $block_id = 0, $args = array() ) {
+	$args     = wp_parse_args( $args, array(
+		'type' => 'text',
+		'raw'  => true
+	) );
 	$query    = new WP_Query;
 	$es_posts = $query->query( array(
 		'p'         => $block_id,
-		'post_type' => 'es_blocks'
+		'post_type' => 'es_blocks',
+
 	) );
-	switch ( $type ) {
+	switch ( $args['type'] ) {
 		case 'text':
 			$edit_link = esc_url( get_edit_post_link( $block_id ) );
 			break;
@@ -36,8 +42,12 @@ function es_block( $block_id = 0, $type = 'text', $context = 'display' ) {
 	}
 
 	foreach ( $es_posts as $es_post ) {
-		$content = sanitize_post_field( 'post_content', $es_post->post_content, $block_id, $context );
-		echo apply_filters( 'the_content', $content );
+		$content = sanitize_post_field( 'post_content', $es_post->post_content, $block_id, 'display' );
+		if ( ! $args['raw'] ) {
+			echo apply_filters( 'the_content', $content );
+		} else {
+			echo $content;
+		}
 	}
 	if ( current_user_can( 'edit_posts' ) ) {
 		echo "</div>";
@@ -270,7 +280,7 @@ function es_post_meta( $meta_key, $post_id = 0, $args = array() ) {
 		}
 	}
 
-	$meta_value = wp_unslash( $meta_value); // убираем слеши
+	$meta_value = wp_unslash( $meta_value ); // убираем слеши
 	//Если пустое значение мета поля или равно false возвращаем значение заданное в $default
 	if ( empty( $meta_value ) ) {
 		$meta_value = $args['default'];
@@ -293,7 +303,7 @@ function es_post_meta( $meta_key, $post_id = 0, $args = array() ) {
 			$args['echo'] = 0;
 			break;
 		case "date":
-			$post_meta    = date($args['date_format'],strtotime($meta_value));
+			$post_meta = date( $args['date_format'], strtotime( $meta_value ) );
 			break;
 		case "accordion":
 			$post_meta    = get_post_meta( $post_id, es_field_prefix( $meta_key ), 0 );
