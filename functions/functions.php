@@ -13,8 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function es_block( $block_id = 0, $args = array() ) {
 	$args     = wp_parse_args( $args, array(
-		'type' => 'text',
-		'raw'  => true
+		'type'  => 'text',
+		'raw'   => true,
+		'class' => 'es-block'
 	) );
 	$query    = new WP_Query;
 	$es_posts = $query->query( array(
@@ -34,10 +35,11 @@ function es_block( $block_id = 0, $args = array() ) {
 			$edit_link = esc_url( get_edit_post_link( $block_id ) );
 			break;
 	}
+	$class = ! empty( $args['class'] ) ? 'class="' . $args['class'] . '"' : "";
 
 	if ( current_user_can( 'edit_posts' ) ) {
 
-		echo "<div data-es-type='es_blocks' data-es-block=\"$block_id\">";
+		echo "<div data-es-type='es_blocks' data-es-block=\"$block_id\" $class>";
 		echo "<div data-es-type='es_editor'><a href=\"$edit_link\" target=\"_blank\">" . __( 'edit block', 'easy-start' ) . "</a></div>";
 	}
 
