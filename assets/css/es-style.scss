@@ -1,0 +1,282 @@
+//colors
+$color_jaffa_approx: #fb883d;
+$black: #000;
+$color_shark_approx: #23282d;
+$white: #ffffff;
+$color_celeste_approx: #ccc;
+$gray:  gray;
+$color_tundora_approx: #444;
+$color_alto_approx: #ddd;
+$color_bombay_approx: #b4b9be;
+$seashell: #f1f1f1;
+$black_10: rgba(0, 0, 0, .1);
+$black_5: rgba(0, 0, 0, .05);
+$color_gallery_approx: #eee;
+$color_heavy_metal_approx: #2c2c2c;
+$color_razzmatazz_approx: #e91e63;
+$color_maroon_flush_approx: #cf1957;
+$color_mountain_mist_approx: #969696;
+$color_quill_gray_approx: rgb(211, 211, 211);
+
+//fonts
+$font_0: Arial;
+$font_1: Helvetica Neue;
+$font_2: Helvetica;
+$font_3: sans-serif;
+
+//@extend-elements
+//original selectors
+//.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover
+%extend_1 {
+    border: 1px solid $color_shark_approx;
+    background: $color_shark_approx;
+    font-weight: normal;
+    color: $white;
+}
+
+
+div[data-es-type='es_blocks'] {
+    position: relative;
+    &:hover [data-es-type='es_editor'] {
+        display: block;
+    }
+}
+div[data-es-type='es_editor'] {
+    font-family: $font_0, $font_1, $font_2, $font_3;
+    font-size: 14px;
+    font-weight: normal;
+    position: absolute;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    display: none;
+    padding: 1px 8px;
+    cursor: pointer;
+    background: $color_jaffa_approx;
+    a {
+        text-decoration: none;
+        color: $black;
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+}
+.ui-state-active {
+    @extend %extend_1;
+}
+.ui-button {
+    &:active {
+        @extend %extend_1;
+    }
+    &.ui-state-active:hover {
+        @extend %extend_1;
+    }
+}
+.es_options_cont {
+    max-width: 721px;
+}
+.es_add_group {
+    margin-bottom: 15px;
+}
+.es_textarea {
+    width: 100%;
+}
+.es_text {
+    width: 100%;
+}
+.es_field_label {
+    font-size: 13px;
+    color: $color_tundora_approx;
+}
+.es_field_desc {
+    font-size: 13px;
+    color: $color_tundora_approx;
+    margin-bottom: 7px;
+}
+.es_meta_field {
+    margin-bottom: 25px;
+    > img {
+        background: $seashell;
+        width: 184px;
+        height: auto;
+        //Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+        box-shadow: inset 0 0 0 1px $black_10;
+        //Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+        box-shadow: inset 0 0 15px $black_10, inset 0 0 0 1px $black_5;
+        background: $color_gallery_approx;
+    }
+}
+.es_tax_tabs {
+    a {
+        background: $color_alto_approx;
+        padding: 5px 10px;
+        color: $color_tundora_approx;
+        text-decoration: none;
+        display: inline-block;
+        margin-right: 2px;
+        outline: none;
+        //Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+        box-shadow: none;
+    }
+    > ul > li {
+        display: inline-block;
+        > a {
+            &.active {
+                background: $color_bombay_approx;
+                color: $black;
+            }
+            &.focus {
+                background: $color_bombay_approx;
+                color: $black;
+            }
+        }
+    }
+}
+.es-tab-body {
+    display: none;
+    width: 100%;
+    &.active {
+        display: inline-block;
+    }
+}
+.form-field {
+    img {
+        max-width: 185px;
+        border: 2px solid $white;
+        padding: 8px;
+        //Instead of the line below you could use @include box-sizing($bs)
+        box-sizing: border-box;
+        background: $color_mountain_mist_approx;
+    }
+    textarea {
+        border: 1px solid $color_quill_gray_approx;
+    }
+}
+.es-meta-radio {
+    label {
+        margin: 0 20px 0 3px;
+    }
+    input {
+        margin: 2px 3px 0 0;
+    }
+}
+.es-form-row {
+    padding: 10px 14px;
+    border: 1px solid $color_alto_approx;
+    margin-bottom: 15px;
+    background: $seashell;
+    input {
+        width: 100%;
+        height: 34px;
+    }
+    textarea {
+        width: 100%;
+    }
+    .acc-title {
+        margin-bottom: 10px;
+    }
+    .acc-body {
+        margin-bottom: 10px;
+    }
+    .acc-subtitle {
+        margin-bottom: 10px;
+    }
+}
+.es-section-id {
+    font-weight: bold;
+    margin-bottom: 9px;
+}
+.ui-widget-content .ui-state-active {
+    @extend %extend_1;
+}
+.ui-widget-header .ui-state-active {
+    @extend %extend_1;
+}
+a.ui-button:active {
+    @extend %extend_1;
+}
+.ui-tabs.ui-tabs-vertical {
+    padding: 0;
+    width: 42em;
+    .ui-widget-header {
+        border: none;
+    }
+    .ui-tabs-nav {
+        float: left;
+        width: 10em;
+        background: $color_celeste_approx;
+        //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+        border-radius: 4px 0 0 4px;
+        border-right: 1px solid $gray;
+        li {
+            clear: left;
+            width: 100%;
+            margin: 0.2em 0;
+            border: 1px solid $gray;
+            border-width: 1px 0 1px 1px;
+            //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+            border-radius: 4px 0 0 4px;
+            overflow: hidden;
+            position: relative;
+            right: -2px;
+            z-index: 2;
+            a {
+                display: block;
+                width: 100%;
+                padding: 0.6em 1em;
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+            &.ui-tabs-active {
+                margin-bottom: 0.2em;
+                padding-bottom: 0;
+                border-right: 1px solid $white;
+            }
+            &:last-child {
+                margin-bottom: 10px;
+            }
+        }
+    }
+    .ui-tabs-panel {
+        float: left;
+        width: 28em;
+        border-left: 1px solid $gray;
+        //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+        border-radius: 0;
+        position: relative;
+        left: -1px;
+    }
+}
+button#es_add_group_butt {
+    margin-bottom: 8px;
+}
+.upload_image_button.button {
+    background: linear-gradient($color_alto_approx,$color_gallery_approx);
+    color: $color_heavy_metal_approx;
+    height: 35px;
+    padding: 0 34px;
+    border: 1px solid $color_celeste_approx;
+    //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+    border-radius: 0;
+    text-transform: uppercase;
+    letter-spacing: .025em;
+    //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+    transition: all .4s;
+    min-width: 139px;
+    //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+    border-radius: 3px;
+}
+.remove_image_button.button {
+    background: $color_razzmatazz_approx;
+    color: $white;
+    height: 35px;
+    padding: 0 15px;
+    border: 1px solid $color_maroon_flush_approx;
+    //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+    border-radius: 0;
+    text-transform: uppercase;
+    letter-spacing: .025em;
+    //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+    transition: all .4s;
+}
