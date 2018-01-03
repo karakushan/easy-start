@@ -1,126 +1,223 @@
+@mixin clearfix {
+    &:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
 .es-gallery-wrapper {
-  margin: 10px -5px 0 -5px;
-  &:after {
-    content: ".";
-    display: block;
-    height: 0;
-    clear: both;
-    visibility: hidden;
-  }
+    margin: 10px -5px 0 -5px;
+    &:after {
+        content: ".";
+        display: block;
+        height: 0;
+        clear: both;
+        visibility: hidden;
+    }
 
-  .item {
-    width: 218px;
-    float: left;
-    text-align: center;
-    height: 170px;
-    background-size: cover;
-    background-repeat: no-repeat;
-    margin: 0 5px 10px 5px;
-    background-position: center;
-    border: 1px solid #e5e5e5;
-    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
-    box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
-    position: relative;
-    box-shadow: 1px 1px 9px rgba(255, 255, 255, 0.49);
-    &:hover {
-      border: 1px solid #D32F2F;
-      cursor: move;
-      cursor: -webkit-grab;
-    }
-    .es-image-delete {
-      background: linear-gradient(#E53935, #F44336);
-      color: #fff;
-      position: absolute;
-      left: 3px;
-      top: 3px;
-      text-decoration: none;
-      border-radius: 3px;
-      padding: 0px 19px;
-      line-height: 24px;
-      display: inline-block;
-      font-size: 13px;
-      border: 1px solid #D32F2F;
+    .item {
+        width: 218px;
+        float: left;
+        text-align: center;
+        height: 170px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        margin: 0 5px 10px 5px;
+        background-position: center;
+        border: 1px solid #e5e5e5;
+        -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
+        box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
+        position: relative;
+        box-shadow: 1px 1px 9px rgba(255, 255, 255, 0.49);
+        &:hover {
+            border: 1px solid #D32F2F;
+            cursor: move;
+            cursor: -webkit-grab;
+        }
+        .es-image-delete {
+            background: linear-gradient(#E53935, #F44336);
+            color: #fff;
+            position: absolute;
+            left: 3px;
+            top: 3px;
+            text-decoration: none;
+            border-radius: 3px;
+            padding: 0px 19px;
+            line-height: 24px;
+            display: inline-block;
+            font-size: 13px;
+            border: 1px solid #D32F2F;
 
-      &:hover {
-        background: linear-gradient(lighten(#E53935, 8%), lighten(#F44336, 8%));
-      }
+            &:hover {
+                background: linear-gradient(lighten(#E53935, 8%), lighten(#F44336, 8%));
+            }
+        }
+        @media (max-width: 1366px) {
+            width: 159px;
+            height: 115px;
+        }
     }
-    @media (max-width: 1366px) {
-      width: 159px;
-      height: 115px;
-    }
-  }
 }
 
 .es-form-row {
-  padding: 10px 14px;
-  border: 1px solid #d9d9d9;
-  margin-bottom: 15px;
-  background: #f1f1f1;
-  position: relative;
-  .remove {
-    position: absolute;
-    right: 18px;
-    top: 10px;
-    text-decoration: none;
-    font-size: 14px;
-    /* line-height: 14px; */
-    color: #e02222;
-  }
+    padding: 10px 14px;
+    border: 1px solid #d9d9d9;
+    margin-bottom: 15px;
+    background: #f1f1f1;
+    position: relative;
+    .remove {
+        position: absolute;
+        right: 18px;
+        top: 10px;
+        text-decoration: none;
+        font-size: 14px;
+        /* line-height: 14px; */
+        color: #e02222;
+    }
 }
 
 .es-slider-wrapper {
-  .item {
-    position: relative;
-    padding: 15px;
-    background: #f1f1f1;
-    margin: 15px 0;
-    .es-image-delete {
-      position: absolute;
-      right: 21px;
-      top: 15px;
-    }
-    .item-right {
-      width: calc(100% - 320px);
-      float: right;
-      input[type=text] {
-        width: 100%;
-        height: 33px;
-      }
-      textarea {
-        width: 100%;
-      }
-    }
-    p {
-      margin-top: 0;
-    }
-    label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-    .image-add {
-      width: 300px;
-      height: 253px;
-      background: #ccc;
-      box-sizing: border-box;
-      background-repeat: no-repeat;
-      background-position: center;
-      &:hover {
-        background-color: #ffffff;
-        cursor: pointer;
-      }
-    }
-    .item-left {
-      width: 300px;
-      float: left;
-      margin: 0 20px 20px 0;
+    .item {
+        position: relative;
+        padding: 15px;
+        background: #f1f1f1;
+        margin: 15px 0;
+        .es-image-delete {
+            position: absolute;
+            right: 21px;
+            top: 15px;
+        }
+        .item-right {
+            width: calc(100% - 320px);
+            float: right;
+            input[type=text] {
+                width: 100%;
+                height: 33px;
+            }
+            textarea {
+                width: 100%;
+            }
+        }
+        p {
+            margin-top: 0;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .image-add {
+            width: 300px;
+            height: 253px;
+            background: #ccc;
+            box-sizing: border-box;
+            background-repeat: no-repeat;
+            background-position: center;
+            &:hover {
+                background-color: #ffffff;
+                cursor: pointer;
+            }
+        }
+        .item-left {
+            width: 300px;
+            float: left;
+            margin: 0 20px 20px 0;
 
+        }
     }
-  }
 
 }
+
 #slider-row-template {
-  display: none;
+    display: none;
+}
+
+.es_meta_field {
+    margin-bottom: 15px;
+    @include clearfix;
+    .input-group {
+        position: relative;
+        display: table;
+        border-collapse: separate;
+        .input-group-addon {
+            padding: 6px 12px;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1;
+            color: #555;
+            text-align: center;
+            background-color: #eee;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 1%;
+            white-space: nowrap;
+            vertical-align: middle;
+            display: table-cell;
+            &:first-child {
+                border-right: 0;
+                border-bottom-right-radius: 0;
+                border-top-right-radius: 0;
+            }
+            &:last-child {
+                border-left: 0;
+                border-bottom-left-radius: 0;
+                border-top-left-radius: 0;
+            }
+        }
+        input[type=text] {
+            position: relative;
+            z-index: 2;
+            float: left;
+            width: 100%;
+            margin: 0;
+            display: table-cell;
+        }
+    }
+    .es_field_desc {
+        display: block;
+        margin-top: 5px;
+        margin-bottom: 10px;
+        color: #737373;
+    }
+    .file {
+        margin-bottom: 7px;
+        border: 1px solid #ccc;
+        padding: 4px;
+        width: 150px;
+        img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+    }
+    label {
+        display: inline-block;
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+    input {
+        &[type=text] {
+            display: block;
+            width: 100%;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            &:focus {
+                outline: 0;
+                -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+                box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+            }
+        }
+    }
 }
 

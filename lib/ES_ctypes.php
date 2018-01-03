@@ -86,17 +86,38 @@ class ES_ctypes {
 	}
 
 	function es_post_metaboxes() {
-		$config     = new Es_config();
+		$config = new Es_config();
+		global $post;
 		$meta_boxes = isset( $config->data["meta_boxes"] ) ? $config->data["meta_boxes"] : array();
 
 		//Добавляем метабокс
 		if ( $meta_boxes ) {
 			foreach ( $meta_boxes as $key => $meta_box ) {
-				if ( ! $meta_box['display'] ) {
+				//=== НАЧАЛО ПРОВЕРОК ПО УСЛОВИЮ  === //
+				// проверяем свойство "display" если оно пустое, равно 0 или false , то выходим из цикла
+				if ( empty( $meta_box['display'] ) ) {
 					continue;
 				}
+				// если указано условие "template" (шаблон) и оно является массивом
+				if ( ! empty( $meta_box['condition'] ['template'] ) ) {
+					// если шаблон текущей страницы не входит в массив указанных в условии то выходим из цикла
+					if ( is_array( $meta_box['condition']['template'] ) && ! in_array( get_page_template_slug( $post->ID ), $meta_box['condition'] ['template'] ) ) {
+						continue;
+					}
+				}
+				// если указано условие "post_id" (ID страницы, поста) и оно является массивом
+				if ( ! empty( $meta_box['condition']['post_id'] ) ) {
+					// если ID текущего поста не входит  в массив ID указанных в условии, то выходим из цикла
+					if ( is_array( $meta_box['condition']['post_id'] ) && ! in_array( $post->ID, $meta_box['condition']['post_id'] ) ) {
+						continue;
+						// если в качестве аргумента указано число а не массив и оно не равно номеру поста, то выходим из цикла
+					} elseif ( is_numeric( $meta_box['condition']['post_id'] ) && $meta_box['condition']['post_id'] != $post->ID ) {
+						continue;
+					}
+				}
+				// Добавляем метабокс
 				add_meta_box(
-					'es_meta_box' . $key,
+					'es_meta_box_' . $key,
 					$meta_box['name'],
 					array( $this, 'es_meta_block' ),
 					$meta_box['post_types'],
@@ -109,49 +130,58 @@ class ES_ctypes {
 
 	function es_meta_block( $post, $callback ) {
 
-		if ( ! empty( $callback['args']['meta_box']['condition'] ) ) {
-			$condition = $callback['args']['meta_box']['condition'];
-			if ( ! empty( $condition['template'] ) ) {
-				if ( ! in_array( get_page_template_slug( $post->ID ), $condition['template'] ) ) {
-					return $post;
-				}
-			}
-		}
 
 		$config      = new Es_config();
 		$meta_fields = $callback['args']['post_meta'];
+		$box_num     = $callback['args']['box_num'];
+		$languages   = ! empty( $config->data["languages"] ) ? $config->data["languages"] : array(
+			'ru_RU' => array(
+				'slug'    => 'ru',
+				'name'    => 'Русский',
+				'default' => 1
+			)
+		);
 
-		$box_num   = $callback['args']['box_num'];
-		$languages = isset( $config->data["languages"] ) ? $config->data["languages"] : false;
 		echo '<input type="hidden" name="easy[es_box_num]" value="' . $box_num . '">';
-		if ( $languages ) {
-			echo "<div class=\"es_tax_tabs\"><ul>";
-			foreach ( $languages as $lks => $lang ) {
-				if ( isset( $lang['default'] ) && $lang['default'] == 1 ) {
-					$class = 'active';
-				} else {
-					$class = '';
+		if ( ! empty( $languages ) ) {
+			// если больше одного языка в конфиге, то создаём табы, переключатели языков
+			if ( count( $languages ) > 1 ) {
+				echo "<div class=\"es_tax_tabs\"><ul>";
+
+				foreach ( $languages as $lks => $lang ) {
+					if ( isset( $lang['default'] ) && $lang['default'] == 1 ) {
+						$class = 'active';
+					} else {
+						$class = '';
+					}
+					echo "<li><a href=\"#es-tab-{$lang['slug']}\" class=\"{$class}\">{$lang['name']}</a></li>";
 				}
-				echo "<li><a href=\"#es-tab-{$lang['slug']}\" class=\"{$class}\">{$lang['name']}</a></li>";
+				echo "</ul>";
 			}
-			echo "</ul>";
 			foreach ( $languages as $lang_key => $language ) {
 
-				if ( isset( $language['default'] ) && $language['default'] == 1 ) {
-					$class_tab = 'active';
-				} else {
-					$class_tab = '';
+				$lang_name=count( $languages ) > 1 ? sprintf('(%s)',$language['name']) : '';
+
+				if ( count( $languages ) > 1 ) {
+					if ( isset( $language['default'] ) && $language['default'] == 1 ) {
+						$class_tab = 'active';
+					} else {
+						$class_tab = '';
+					}
+					echo "<div id=\"es-tab-{$language['slug']}\" class=\"es-tab-body {$class_tab}\">";
 				}
-				echo "<div id=\"es-tab-{$language['slug']}\" class=\"es-tab-body {$class_tab}\">";
-				if ( $meta_fields ) {
+				if ( ! empty( $meta_fields ) ) {
 					foreach ( $meta_fields as $key => $field ) {
 						$field_name = es_field_prefix( $key, $lang_key );
 						$editor_id  = mb_strtolower( str_replace( array( '_' ), array( '-' ), $field_name ) );
 						$content    = wp_unslash( get_post_meta( $post->ID, $field_name, 1 ) );
-						echo "<div class='es_meta_field'>";
-						echo "<div class='es_field_label'><strong>" . $field['name'] . " (" . $language['name'] . ")</strong></div>";
-						echo "<div class='es_field_desc'><em>" . $field['desc'] . "</em></div>";
 
+						echo "<div class='es_meta_field'>";
+						echo "<label for=\"" . esc_attr( $field_name ) . "\">" . $field['name'] . " {$lang_name}</label>";
+						if ( ! empty( $field['before'] ) ) {
+							echo '<div class="input-group">';
+							echo '<span class="input-group-addon">' . $field['before'] . '</span>';
+						}
 						switch ( $field['type'] ) {
 
 							case 'editor':
@@ -168,23 +198,7 @@ class ES_ctypes {
 								break;
 
 							case 'image' :
-								$default  = '';
-								$h        = '100';
-								$w        = '100';
-								$image_id = (int) $content;
-								if ( $image_id ) {
-									$image_attributes = wp_get_attachment_image_src( $image_id, array( $h, $w ) );
-									$src              = $image_attributes[0];
-								} else {
-									$src = $default;
-								}
-								echo '
-                            <img data-src="' . $default . '" src="' . $src . '" width="' . $w . 'px" height="' . $h . 'px" />
-                            <div>
-                               <input type="hidden" name="easy[' . $field_name . ']" id="' . $field_name . '" value="' . $image_id . '" />
-                               <button type="button" class="upload_image_button button">Загрузить</button>
-                               <button type="button" class="remove_image_button button">&times;</button>
-                           </div>';
+								es_field_template( $field['type'], $field_name, $content );
 								break;
 
 							case 'textarea':
@@ -192,7 +206,7 @@ class ES_ctypes {
 								break;
 
 							case 'text' :
-								echo '<input type="text"  name="easy[' . $field_name . ']" id="' . $editor_id . '" class="es_text" value="' . esc_html( $content ). '">';
+								echo '<input type="text"  name="easy[' . $field_name . ']" id="' . $editor_id . '" class="es_text" value="' . esc_html( $content ) . '">';
 								break;
 
 							case 'taxonomy' :
@@ -230,146 +244,25 @@ class ES_ctypes {
 
 
 						}
+						if ( ! empty( $field['after'] ) ) {
+							echo '<span class="input-group-addon">' . $field['after'] . '</span>';
+						}
+						if ( ! empty( $field['before'] ) || ! empty( $field['after'] ) ) {
+							echo '</div>';
+						}
+						echo "<div class='es_field_desc'><em>" . $field['desc'] . "</em></div>";
 						echo "</div>";
 
+
 					}
 				}
-				echo "</div>";
-			}
 
-
-			echo "</div>";
-		} else {
-			echo "<div id=\"es-meta-block\">";
-			if ( $meta_fields ) {
-				foreach ( $meta_fields as $key => $field ) {
-					if ( ! empty( $field['condition'] ) ) {
-						if ( ! empty( $field['condition']['template'] ) ) {
-							if ( ! in_array( get_page_template_slug( $post->ID ), $field['condition']['template'] ) ) {
-								continue;
-							}
-						}
-					}
-					$field_name = $key;
-					$editor_id  = mb_strtolower( str_replace( array( '_' ), array( '-' ), $key ) );
-					if ( in_array( $field['type'], array( 'gallery', 'accordion' ) ) ) {
-						$content = get_post_meta( $post->ID, $key, 0 );
-						if ( ! empty( $content[0] ) ) {
-							$content = $content[0];
-						}
-					} else {
-						$content = get_post_meta( $post->ID, $key, 1 );
-					}
-
-
-					if ( empty( $content ) && isset( $field['default'] ) ) {
-						if ( $field['default'] == 'es_block' ) {
-							$content = es_get_block( $field['es_block'] );
-						} else {
-							$content = $field['default'];
-						}
-
-					}
-
-					$content = wp_unslash( $content );
-
-					echo "<div class='es_meta_field es-meta-" . $field['type'] . "'>";
-					echo "<div class='es_field_label'><strong>" . $field['name'] . "</strong></div>";
-					echo "<div class='es_field_desc'><em>" . $field['desc'] . "</em></div>";
-
-					switch ( $field['type'] ) {
-						case 'editor':
-							$editor_args    = array();
-							$editor_default = array(
-								'wpautop'       => false,
-								'media_buttons' => 1,
-								'textarea_name' => 'easy[' . $key . ']',
-								'editor_class'  => $editor_id,
-								'tinymce'       => array(
-									'verify_html' => false
-								),
-
-							);
-							if ( ! empty( $field['editor'] ) && is_array( $field['editor'] ) ) {
-								$editor_args = $field['editor'];
-							}
-							$editor_args = wp_parse_args( $editor_args, $editor_default );
-							wp_editor( $content, $editor_id, $editor_args );
-							break;
-
-						case 'image' :
-							es_field_template( $field['type'], $field_name, $content );
-							break;
-						case 'file' :
-							es_field_template( $field['type'], $field_name, $content );
-							break;
-						case 'taxonomy' :
-							es_field_template( $field['type'], $field_name, $content, array( 'taxonomy' => $field['taxonomy'] ) );
-							break;
-
-						case 'textarea':
-							$content = esc_html__( $content );
-							echo '<textarea  name="easy[' . $key . ']" class="es_textarea" id="' . $editor_id . '" rows="12">' . $content . '</textarea>';
-							break;
-
-						case 'text' :
-							$content = esc_html__( $content );
-							echo '<input type="text"  name="easy[' . $key . ']" id="' . $editor_id . '" class="es_text" value="' . esc_html( $content ) . '">';
-							break;
-
-						case 'checkbox' :
-							echo '<input type="hidden"  name="easy[' . $key . ']" id="hidden-' . $key . '" value="0" />';
-							echo '<input type="checkbox"  name="easy[' . $key . ']" id="' . $key . '" value="1" ' . checked( $content, 1, 0 ) . ' class="es_text"/>';
-							break;
-						case 'select':
-							es_field_template( $field['type'], $field_name, $content, array( 'values' => $field['values'] ) );
-							break;
-
-						case 'radio' :
-							if ( $field['values'] ) {
-								$f=0;
-								foreach ( $field['values'] as $field_key => $value ) {
-									echo '<input type="radio"  name="easy[' . $key . ']" id="'.$key.'-'.$f.'"  value="' . $value. '" ' . checked( $content, $value, 0 ) . ' class="es_text"/><label for="'.$key.'-'.$f.'">' .$field_key. '</label>';
-								$f++;
-								}
-
-							}
-							break;
-						case 'gallery':
-							es_field_template( $field['type'], $field_name, $content );
-							break;
-						case 'slider':
-							es_field_template( $field['type'], $field_name, $content );
-							break;
-						case 'accordion':
-							es_field_template( $field['type'], $field_name, $content );
-							break;
-						case 'post':
-							es_field_template( $field['type'], $field_name, $content, array( 'post_type' => $field['post_type'] ) );
-							break;
-
-						case 'date':
-							echo '<input type="date"  name="easy[' . $key . ']" id="' . $editor_id . '" class="es_text" value="' . $content . '" style="width:150px">';
-							break;
-
-						case 'time':
-							echo '<input type="time"  name="easy[' . $key . ']" id="' . $editor_id . '" class="es_text" value="' . $content . '" style="width:150px">';
-							break;
-						case 'week':
-							echo '<input type="week"  name="easy[' . $key . ']" id="' . $editor_id . '" class="es_text" value="' . $content . '" style="width:150px">';
-							break;
-
-						default:
-							$content = esc_html__( $content );
-							echo '<input type="text"  name="easy[' . $key . ']" id="' . $editor_id . '" class="es_text" value="' . esc_html( $content ) . '">';
-							break;
-
-
-					}
+				if ( count( $languages ) > 1 ) {
 					echo "</div>";
-
 				}
 			}
+
+
 			echo "</div>";
 		}
 

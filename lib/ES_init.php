@@ -81,11 +81,12 @@ class ES_init {
 	}
 
 	function es_admin_scripts() {
+
 		if ( ! did_action( 'wp_enqueue_media' ) ) {
 			wp_enqueue_media();
 		}
-		wp_enqueue_style( 'es-admin-css', plugins_url() . '/easy-start/assets/css/es-admin.css' );
-		wp_enqueue_script( 'easy-start-admin', plugins_url() . '/easy-start/assets/js/easy-start-admin.js', array(
+		wp_enqueue_style( 'es-admin-css', ES_DIR_URL . 'assets/css/es-admin.css' );
+		wp_enqueue_script( 'es-admin-js', ES_DIR_URL .'assets/js/easy-start-admin.js', array(
 			'jquery',
 			'jquery-ui-core'
 		), false, true );
@@ -102,7 +103,7 @@ class ES_init {
 	}
 
 	function custom_mce_external_plugins( $plugin_array ) {
-		$plugin_array['my_custom_button'] = ES_DIR_URL . 'js/easy-tinymce.js';
+		$plugin_array['my_custom_button'] = ES_DIR_URL . 'assets/js/easy-start-admin.js';
 
 		return $plugin_array;
 	}

@@ -1,4 +1,39 @@
 jQuery(function ($) {
+
+    tinymce.PluginManager.add('my_custom_button', function (editor, url) {
+        editor.addButton('my_custom_button', {
+            text: 'Вставить блок',
+            icon: false,
+            type: 'menubutton',
+            onclick: function () {
+                $.ajax({
+                    url: ajaxurl,
+                    type: 'POST',
+                    data: {action: 'es_get_blocks'},
+                })
+                    .done(function (result) {
+                        editor.windowManager.open({
+                            title: 'Выберите из существующих блоков',
+                            body: [
+                                {
+                                    type: 'listbox',
+                                    name: 'level',
+                                    label: 'Выберите шаблон',
+                                    values: JSON.parse(result)
+                                }
+                            ],
+                            onsubmit: function (e) {
+                                editor.insertContent(e.data.level);
+                            }
+                        });
+                    });
+
+
+            }
+        });
+    });
+
+
     $('.es_tax_tabs>ul>li>a').on('click', function (event) {
         event.preventDefault();
         $(this).parents('.es_tax_tabs').find('.es-tab-body').removeClass('active');
@@ -16,14 +51,13 @@ jQuery(function ($) {
         var send_attachment_bkp = wp.media.editor.send.attachment;
         var button = $(this);
         wp.media.editor.send.attachment = function (props, attachment) {
-            console.log(attachment)
-            if (typeof(attachment.sizes.thumbnail) == 'undefined') {
-                imageUrl = attachment.url;
-            }else{
-                imageUrl = attachment.sizes.thumbnail.url;
+            if (attachment.mime != "image/x-icon") {
+                $(button).parents('.es_meta_field').find('.file img:first').attr('src', attachment.sizes.thumbnail.url).fadeIn();
+                $(button).prev().val(attachment.id);
+            } else {
+                alert('Файл не является изображением');
             }
-            $(button).parents('.es_meta_field').find('.file').html('<img src="' + imageUrl + '">').fadeIn();
-            $(button).prev().val(attachment.id);
+
             wp.media.editor.send.attachment = send_attachment_bkp;
         };
         wp.media.editor.open(button);
@@ -34,14 +68,12 @@ jQuery(function ($) {
      * если быть точным, то мы просто удаляем value у input type="hidden"
      */
     $('.remove_image_button').click(function () {
-        var r = confirm("Confirm?");
-        if (r == true) {
-            var src = $(this).parent().prev().attr('data-src');
-            $(this).parent().prev().attr('src', src).fadeOut();
-            $(this).prev().prev().val('');
-            $(button).parents('.es_meta_field').find('.file').fadeOut().html('');
+        var button = $(this);
+        if (confirm("Подтверждаете?")) {
+            button.parents('.es_meta_field').find('.file img:first').attr('src', button.data('no-image'));
+            button.prev().prev().val('');
         }
-        return false;
+        return false; 
     });
     //удаление изображений из галереи
     $('.es-gallery-wrapper').on('click', '.es-image-delete', function (e) {

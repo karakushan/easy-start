@@ -28,12 +28,15 @@
     along with Contact Form to Database Extension.
     If not, see http://www.gnu.org/licenses/gpl-3.0.html
 */
-    if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+} // Exit if accessed directly
 
-    define('ES_DIR_PATH',plugin_dir_path( __FILE__ )); // системный путь к плагину
-    define('ES_DIR_URL',plugin_dir_url( __FILE__ )); // системный путь к плагину
+define( 'ES_DIR_PATH', plugin_dir_path( __FILE__ ) ); // системный путь к плагину
+define( 'ES_DIR_URL', plugin_dir_url( __FILE__ ) ); // урл к плагину относительно домена
+define( 'ES_NO_IMAGE_URL', plugin_dir_url( __FILE__ ) . 'assets/img/no-image.png' ); // путь к заглушке изображения
 
-    require_once 'vendor/autoload.php';
-    new ES_LIB\ES_init; 
+require_once 'vendor/autoload.php';
+new ES_LIB\ES_init;
 
 
