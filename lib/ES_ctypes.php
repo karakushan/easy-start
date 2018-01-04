@@ -142,7 +142,8 @@ class ES_ctypes {
 			)
 		);
 
-		echo '<input type="hidden" name="easy[es_box_num]" value="' . $box_num . '">';
+		echo '<input type="hidden" name="easy[es_box_num]" value="' . esc_attr( $box_num ) . '">';
+		wp_nonce_field( plugin_basename( __FILE__ ),'es_nonce' );
 		if ( ! empty( $languages ) ) {
 			// если больше одного языка в конфиге, то создаём табы, переключатели языков
 			if ( count( $languages ) > 1 ) {
@@ -160,7 +161,7 @@ class ES_ctypes {
 			}
 			foreach ( $languages as $lang_key => $language ) {
 
-				$lang_name=count( $languages ) > 1 ? sprintf('(%s)',$language['name']) : '';
+				$lang_name = count( $languages ) > 1 ? sprintf( '(%s)', $language['name'] ) : '';
 
 				if ( count( $languages ) > 1 ) {
 					if ( isset( $language['default'] ) && $language['default'] == 1 ) {
@@ -235,18 +236,18 @@ class ES_ctypes {
 								break;
 
 							default:
-								es_field_template( $field['type'], $field_name, $content,$field);
+								es_field_template( $field['type'], $field_name, $content, $field );
 								break;
 
 
 						}
 						if ( ! empty( $field['after'] ) ) {
-							echo '<span class="input-group-addon">' . $field['after'] . '</span>';
+							echo '<span class="input-group-addon">' . esc_attr( $field['after'] ) . '</span>';
 						}
 						if ( ! empty( $field['before'] ) || ! empty( $field['after'] ) ) {
 							echo '</div>';
 						}
-						echo "<div class='es_field_desc'><em>" . $field['desc'] . "</em></div>";
+						echo "<div class='es_field_desc'><em>" . esc_attr( $field['desc'] ) . "</em></div>";
 						echo "</div>";
 
 
@@ -267,6 +268,12 @@ class ES_ctypes {
 
 // сохраняем наши мета поля
 	function es_post_save( $postID ) {
+		// проверяем nonce нашей страницы, потому что save_post может быть вызван с другого места.
+		if ( ! wp_verify_nonce( $_POST['es_nonce'], plugin_basename( __FILE__ ) ) ) {
+			return;
+		}
+
+
 		if ( ! isset( $_POST['easy'] ) || wp_is_post_revision( $postID ) || ( isset( $_POST['action'] ) && $_POST['action'] == 'autosave' ) ) {
 			return;
 		}
