@@ -204,7 +204,8 @@
       cursor: move; }
     .es-slider-wrapper section .bottom {
       display: flex;
-      justify-content: space-between; }
+      justify-content: space-between;
+      flex-wrap: wrap; }
       .es-slider-wrapper section .bottom textarea {
         width: calc(100% - 164px);
         height: 152px; }
@@ -235,7 +236,7 @@
       margin-bottom: 18px; }
       .es-slider-wrapper section header .title {
         height: 20px;
-        width: 400px;
+        width: calc(100% - 91px);
         margin-left: 9px;
         border: 1px solid #e2e2e2;
         font-size: 13px; }
@@ -263,5 +264,13 @@
         float: left;
         cursor: pointer;
         line-height: 24px; }
+
+@media (max-width: 544px) {
+  .es-slider-wrapper section.active {
+    height: auto;
+    overflow: auto; }
+  .es-slider-wrapper section .bottom textarea {
+    width: 100%;
+    margin-top: 10px; } }
 
 /*# sourceMappingURL=es-admin.css.map */
