@@ -428,11 +428,12 @@ function es_options( $key, $args = array() ) {
 function es_field_template( $type = 'text', $name = '', $value, $args = array() ) {
 	$template = ES_DIR_PATH . "templates/field/" . $type . ".php";
 	$default  = array(
-		'style'        => '',
-		'taxonomy'     => 'category',
-		'post_type'    => 'page',
-		'values'       => array(),
-		'first_option' => __( 'Please Select', 'easy-start' )
+		'style'         => '',
+		'taxonomy'      => 'category',
+		'post_type'     => 'page',
+		'values'        => array(),
+		'textarea_rows' => 8,
+		'first_option'  => __( 'Please Select', 'easy-start' )
 	);
 	$args     = wp_parse_args( $args, $default );
 	switch ( $type ) {

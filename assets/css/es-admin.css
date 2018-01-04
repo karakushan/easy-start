@@ -106,6 +106,8 @@
     content: "";
     display: table;
     clear: both; }
+  .es_meta_field .es_textarea {
+    width: 100%; }
   .es_meta_field .input-group {
     position: relative;
     display: table;

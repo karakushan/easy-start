@@ -101,7 +101,7 @@ jQuery(function ($) {
         var button = $(this);
         wp.media.editor.send.attachment = function (props, attachment) {
             if (attachment.mime != "image/x-icon") {
-                $(button).parents('.es_meta_field').find('.file img:first').attr('src', attachment.sizes.thumbnail.url).fadeIn();
+                $(button).parents('.es_meta_field').find('.file img:first').attr('src', attachment.url).fadeIn();
                 $(button).prev().val(attachment.id);
             } else {
                 alert('Файл не является изображением');

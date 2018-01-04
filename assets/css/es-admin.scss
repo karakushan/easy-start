@@ -136,6 +136,9 @@
 .es_meta_field {
     margin-bottom: 15px;
     @include clearfix;
+    .es_textarea{
+        width: 100%;
+    }
     .input-group {
         position: relative;
         display: table;
