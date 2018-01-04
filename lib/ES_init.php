@@ -103,7 +103,7 @@ class ES_init {
 	}
 
 	function custom_mce_external_plugins( $plugin_array ) {
-		$plugin_array['my_custom_button'] = ES_DIR_URL . 'assets/js/easy-start-admin.js';
+		$plugin_array['my_custom_button'] = ES_DIR_URL . 'assets/js/easy-tinymce.js';
 
 		return $plugin_array;
 	}

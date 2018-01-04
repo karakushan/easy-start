@@ -1,36 +1,85 @@
 jQuery(function ($) {
 
-    tinymce.PluginManager.add('my_custom_button', function (editor, url) {
-        editor.addButton('my_custom_button', {
-            text: 'Вставить блок',
-            icon: false,
-            type: 'menubutton',
-            onclick: function () {
-                $.ajax({
-                    url: ajaxurl,
-                    type: 'POST',
-                    data: {action: 'es_get_blocks'},
-                })
-                    .done(function (result) {
-                        editor.windowManager.open({
-                            title: 'Выберите из существующих блоков',
-                            body: [
-                                {
-                                    type: 'listbox',
-                                    name: 'level',
-                                    label: 'Выберите шаблон',
-                                    values: JSON.parse(result)
-                                }
-                            ],
-                            onsubmit: function (e) {
-                                editor.insertContent(e.data.level);
-                            }
-                        });
-                    });
-
-
-            }
+    function slidesReIndex(slides) {
+        slides.each(function (index, value) {
+            var name = $(this).parent('.es-slides').data('name');
+            var el = $(this);
+            var c = index;
+            el.attr('data-index', c);
+            el.find('.count').text(c);
+            el.find('.text').attr('name', "easy[" + name + "][" + c + "][text]");
+            el.find('.title').attr('name', "easy[" + name + "][" + c + "][title]");
+            el.find('.image-input').attr('name', "easy[" + name + "][" + c + "][image]");
         });
+    }
+
+    $('.es-sort').sortable({
+        update: function (event, ui) {
+            slidesReIndex(ui.item.parent().find('section'));
+        }
+    });
+    // поле типа слайдер
+    $(document).on('click', '[data-action="add-slide"]', function (event) {
+        event.preventDefault();
+        var slidesWrap = $(this).parents('.es-slider-wrapper').find('.es-slides');
+        var name = slidesWrap.data('name');
+
+        var count = slidesWrap.find('section').length;
+        // console.log(count);
+        var section = "<section data-index='" + count + "'>" +
+            "<header> <span class=\"dashicons dashicons-plus\" data-action='open-section'></span>" +
+            "<span class='count'>" + count + "</span> " +
+            "<input name='easy[" + name + "][" + count + "][title]' class='title'>" +
+            "<span class=\"dashicons dashicons-dismiss\" data-action='remove-section'></span>" +
+            "</header>" +
+            "<div class='bottom'>" +
+            "<div class='image' title='добавить/заменить изображение' data-action=\"select-image\">" +
+            "<input type='hidden' name='easy[" + name + "][" + count + "][image]' class='image-input'> " +
+            "<span class=\"dashicons dashicons-plus-alt\"></span>" +
+            "</div>" +
+            "<textarea name='easy[" + name + "][" + count + "][text]' class='text' placeholder='Ваш текст или HTMl код'></textarea>" +
+            "</div> " +
+            "</section>";
+        slidesWrap.append(section);
+        slidesReIndex(slidesWrap.find('section'));
+    });
+
+    // удаление секции слайдера
+    $(document).on('click', '[data-action="remove-section"]', function (event) {
+        event.preventDefault();
+        var sections = $(this).parents('.es-slides');
+        if (confirm('Подтверждаете действие?')) {
+            $(this).parents('section').remove();
+            slidesReIndex(sections.find('section'));
+        }
+    });
+
+    // открытие секции слайдера
+    $(document).on('click', '[data-action="open-section"]', function (event) {
+        event.preventDefault();
+        $(this).parents('section').toggleClass('active');
+
+    });
+
+    $(document).on('click', '[data-action="select-image"]', function (event) {
+        event.preventDefault();
+        var send_attachment_bkp = wp.media.editor.send.attachment;
+        var button = $(this);
+        wp.media.editor.send.attachment = function (props, attachment) {
+            if (attachment.mime != "image/x-icon") {
+                button.css({
+                    'background-image': "url(" + attachment.sizes.thumbnail.url + ")"
+                });
+                $(button).find('input').val(attachment.id);
+            } else {
+                alert('Файл не является изображением');
+            }
+
+            wp.media.editor.send.attachment = send_attachment_bkp;
+        };
+        wp.media.editor.open(button);
+        return false;
+
     });
 
 
@@ -73,7 +122,7 @@ jQuery(function ($) {
             button.parents('.es_meta_field').find('.file img:first').attr('src', button.data('no-image'));
             button.prev().prev().val('');
         }
-        return false; 
+        return false;
     });
     //удаление изображений из галереи
     $('.es-gallery-wrapper').on('click', '.es-image-delete', function (e) {

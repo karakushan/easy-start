@@ -201,6 +201,7 @@ class ES_ctypes {
 								es_field_template( $field['type'], $field_name, $content );
 								break;
 
+
 							case 'textarea':
 								echo '<textarea  name="easy[' . $field_name . ']" class="es_textarea" id="' . $editor_id . '" rows="12">' . $content . '</textarea>';
 								break;
@@ -239,7 +240,7 @@ class ES_ctypes {
 								break;
 
 							default:
-								echo '<input type="text"  name="easy[' . $field_name . ']" id="' . $editor_id . '" class="es_text" value="' . esc_html( $content ) . '">';
+								es_field_template( $field['type'], $field_name, $content );
 								break;
 
 
