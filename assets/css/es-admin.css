@@ -1,3 +1,8 @@
+.postbox-container:after {
+  content: "";
+  display: table;
+  clear: both; }
+
 .es-gallery-wrapper {
   margin: 10px -5px 0 -5px; }
   .es-gallery-wrapper:after {

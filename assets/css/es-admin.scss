@@ -6,6 +6,9 @@
     }
 }
 
+.postbox-container{
+    @include clearfix;
+}
 .es-gallery-wrapper {
     margin: 10px -5px 0 -5px;
     &:after {

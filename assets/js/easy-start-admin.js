@@ -68,7 +68,7 @@ jQuery(function ($) {
         wp.media.editor.send.attachment = function (props, attachment) {
             if (attachment.mime != "image/x-icon") {
                 button.css({
-                    'background-image': "url(" + attachment.sizes.thumbnail.url + ")"
+                    'background-image': "url(" + attachment.url + ")"
                 });
                 $(button).find('input').val(attachment.id);
             } else {
