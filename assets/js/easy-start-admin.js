@@ -1,5 +1,6 @@
 jQuery(function ($) {
 
+    // Изменяет индекс секций слайдера при удалении или изменении порядка
     function slidesReIndex(slides) {
         slides.each(function (index, value) {
             var name = $(this).parent('.es-slides').data('name');
