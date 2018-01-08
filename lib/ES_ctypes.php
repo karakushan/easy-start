@@ -255,51 +255,46 @@ class ES_ctypes {
 	function es_post_save( $postID ) {
 		// проверяем nonce нашей страницы, потому что save_post может быть вызван с другого места.
 		if ( ! wp_verify_nonce( $_POST['es_nonce'], plugin_basename( __FILE__ ) ) ) {
-			return;
+			exit( 'Неправильный проверочный код!' );
 		}
 
-
-		if ( ! isset( $_POST['easy'] ) || wp_is_post_revision( $postID ) || ( isset( $_POST['action'] ) && $_POST['action'] == 'autosave' ) ) {
+		if ( wp_is_post_revision( $postID ) || ( isset( $_POST['action'] ) && $_POST['action'] == 'autosave' ) ) {
 			return;
 		}
 		$config     = new Es_config();
 		$meta_boxes = isset( $config->data["meta_boxes"] ) ? $config->data["meta_boxes"] : array();
-		$box_num    = $_POST['easy']['es_box_num'];
-		$post_meta  = $meta_boxes[ $box_num ]['post_meta'];
 		$languages  = ES_config::$languages;
 
-		if ( count( $languages ) ) {
-			foreach ( $languages as $lang_key => $lang ) {
-				foreach ( $post_meta as $meta_key => $meta_value ) {
-					$field_name = es_field_prefix( $meta_key, $lang_key );
-					if ( ( empty( $_POST['easy'][ $meta_key ] ) || ! isset( $_POST['easy'][ $field_name ] ) )
-					     && $post_meta[ $meta_key ]['type'] != 'checkbox'
-					) {
-						delete_post_meta( $postID, $field_name );
-					} else {
-						$content = wp_slash( $_POST['easy'][ $field_name ] );
-						if ( $post_meta[ $meta_key ]['type'] == "text" ) {
-							$content = wp_specialchars_decode( $_POST['easy'][ $field_name ], ENT_QUOTES );
+		$languages = ! empty( $languages ) ? $languages : array(
+			'ru_RU' => array(
+				'slug'    => 'ru',
+				'name'    => 'Русский',
+				'default' => 1
+			)
+		);
+
+		if ( $meta_boxes ) {
+			foreach ( $meta_boxes as $metabox_id => $meta_box ) {
+				$post_meta = $meta_boxes[ $metabox_id ]['post_meta'];
+				foreach ( $languages as $lang_key => $lang ) {
+					foreach ( $post_meta as $meta_key => $meta_value ) {
+						$field_name = es_field_prefix( $meta_key, $lang_key );
+						if ( ( empty( $_POST['easy'][ $meta_key ] ) || ! isset( $_POST['easy'][ $field_name ] ) )
+						     && $post_meta[ $meta_key ]['type'] != 'checkbox'
+						) {
+							delete_post_meta( $postID, $field_name );
+						} else {
+							$content = wp_slash( $_POST['easy'][ $field_name ] );
+							if ( $post_meta[ $meta_key ]['type'] == "text" ) {
+								$content = wp_specialchars_decode( $_POST['easy'][ $field_name ], ENT_QUOTES );
+							}
+							update_post_meta( $postID, $field_name, $content );
 						}
-						update_post_meta( $postID, $field_name, $content );
 					}
-				}
-			}
-		} else {
-			foreach ( $post_meta as $meta_key => $meta_value ) {
-				if ( ( empty( $_POST['easy'][ $meta_key ] ) || ! isset( $_POST['easy'][ $meta_key ] ) )
-				     && $post_meta[ $meta_key ]['type'] != 'checkbox'
-				) {
-					delete_post_meta( $postID, $meta_key );
-				} else {
-					$content = wp_slash( $_POST['easy'][ $meta_key ] );
-					if ( $post_meta[ $meta_key ]['type'] == "text" ) {
-						$content = wp_specialchars_decode( $_POST['easy'][ $meta_key ], ENT_QUOTES );
-					}
-					update_post_meta( $postID, $meta_key, $content );
 				}
 			}
 		}
+
 	}
 
 }
