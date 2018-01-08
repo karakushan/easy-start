@@ -396,6 +396,7 @@ function es_options( $key, $args = array() ) {
 			$options_value = get_option( $key, $args['default'] );
 			break;
 	}
+	$options_value = trim( $options_value );
 
 	//придаём настройкам соответствующий формат
 	switch ( $args['format'] ) {

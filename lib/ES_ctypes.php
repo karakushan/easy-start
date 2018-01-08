@@ -188,6 +188,9 @@ class ES_ctypes {
 								es_field_template( $field['type'], $field_name, $content );
 								break;
 							case 'text' :
+								if ( empty( $content ) && ! empty( $field['default'] ) ) {
+									$content = $field['default'];
+								}
 								echo '<input type="text"  name="easy[' . $field_name . ']" id="' . $editor_id . '" class="es_text" value="' . esc_html( $content ) . '">';
 								break;
 
