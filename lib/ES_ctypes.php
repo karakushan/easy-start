@@ -143,7 +143,7 @@ class ES_ctypes {
 		);
 
 		echo '<input type="hidden" name="easy[es_box_num]" value="' . esc_attr( $box_num ) . '">';
-		wp_nonce_field( plugin_basename( __FILE__ ),'es_nonce' );
+		wp_nonce_field( plugin_basename( __FILE__ ), 'es_nonce' );
 		if ( ! empty( $languages ) ) {
 			// если больше одного языка в конфиге, то создаём табы, переключатели языков
 			if ( count( $languages ) > 1 ) {
@@ -184,24 +184,9 @@ class ES_ctypes {
 							echo '<span class="input-group-addon">' . $field['before'] . '</span>';
 						}
 						switch ( $field['type'] ) {
-
-							case 'editor':
-								wp_editor( $content, $editor_id, array(
-									'wpautop'       => false,
-									'media_buttons' => 1,
-									'textarea_name' => 'easy[' . $field_name . ']',
-
-									'tinymce' => array(
-										'verify_html' => false
-									),
-
-								) );
-								break;
-
 							case 'image' :
 								es_field_template( $field['type'], $field_name, $content );
 								break;
-
 							case 'text' :
 								echo '<input type="text"  name="easy[' . $field_name . ']" id="' . $editor_id . '" class="es_text" value="' . esc_html( $content ) . '">';
 								break;
@@ -258,9 +243,6 @@ class ES_ctypes {
 					echo "</div>";
 				}
 			}
-
-
-			echo "</div>";
 		}
 
 

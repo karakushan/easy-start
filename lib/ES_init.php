@@ -86,10 +86,24 @@ class ES_init {
 			wp_enqueue_media();
 		}
 		wp_enqueue_style( 'es-admin-css', ES_DIR_URL . 'assets/css/es-admin.css' );
-		wp_enqueue_script( 'es-admin-js', ES_DIR_URL .'assets/js/easy-start-admin.js', array(
+
+		wp_enqueue_script( 'es-admin-js', ES_DIR_URL . 'assets/js/easy-start-admin.js', array(
 			'jquery',
 			'jquery-ui-core'
 		), false, true );
+	}
+
+	function codemirror_enqueue_scripts() {
+		wp_enqueue_script( 'codemirror' );
+		wp_enqueue_style( 'codemirror' );
+
+		wp_enqueue_style( 'cm_blackboard' );
+
+		wp_enqueue_script( 'cm_xml' );
+		wp_enqueue_script( 'cm_javascript' );
+		wp_enqueue_script( 'cm_css' );
+		wp_enqueue_script( 'cm_php' );
+		wp_enqueue_script( 'cm_clike' );
 	}
 
 	function register_es_settings() {

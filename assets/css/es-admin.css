@@ -166,7 +166,8 @@
   .es_meta_field label {
     display: inline-block;
     margin-bottom: 5px;
-    font-weight: 600; }
+    font-weight: 600;
+    margin-right: 10px; }
   .es_meta_field input[type=text], .es_meta_field input[type=number], .es_meta_field input[type=email], .es_meta_field input[type=date] {
     display: block;
     width: 100%;
