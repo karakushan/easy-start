@@ -255,7 +255,7 @@ class ES_ctypes {
 	function es_post_save( $postID ) {
 		// проверяем nonce нашей страницы, потому что save_post может быть вызван с другого места.
 		if ( ! wp_verify_nonce( $_POST['es_nonce'], plugin_basename( __FILE__ ) ) ) {
-			exit( 'Неправильный проверочный код!' );
+			return;
 		}
 
 		if ( wp_is_post_revision( $postID ) || ( isset( $_POST['action'] ) && $_POST['action'] == 'autosave' ) ) {
