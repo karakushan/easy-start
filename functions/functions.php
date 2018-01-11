@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function es_block( $block_id = 0, $args = array() ) {
 	$args     = wp_parse_args( $args, array(
 		'type'  => 'text',
-		'raw'   => true,
+		'raw'   => false,
 		'class' => 'es-block'
 	) );
 	$query    = new WP_Query;
@@ -259,7 +259,7 @@ function es_post_meta( $meta_key, $post_id = 0, $args = array() ) {
 		'default'     => '',
 		'type'        => 'text',
 		'es_block'    => '',
-		'raw'         => true,
+		'raw'         => false,
 		'echo'        => true,
 		'filter'      => false,
 		'date_format' => 'd.m.Y'
@@ -396,7 +396,6 @@ function es_options( $key, $args = array() ) {
 			$options_value = get_option( $key, $args['default'] );
 			break;
 	}
-	$options_value = trim( $options_value );
 
 	//придаём настройкам соответствующий формат
 	switch ( $args['format'] ) {

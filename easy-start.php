@@ -35,7 +35,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'ES_DIR_PATH', plugin_dir_path( __FILE__ ) ); // системный путь к плагину
 define( 'ES_DIR_URL', plugin_dir_url( __FILE__ ) ); // урл к плагину относительно домена
 define( 'ES_NO_IMAGE_URL', plugin_dir_url( __FILE__ ) . 'assets/img/no-image.png' ); // путь к заглушке изображения
-
 require_once 'vendor/autoload.php';
 new ES_LIB\ES_init;
 
