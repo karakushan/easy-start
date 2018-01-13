@@ -273,5 +273,31 @@
   .es-slider-wrapper section .bottom textarea {
     width: 100%;
     margin-top: 10px; } }
+.es_tax_tabs > ul {
+  border-bottom: 1px solid #ddd; }
+  .es_tax_tabs > ul > li {
+    display: inline-block;
+    margin-right: 10px; }
+    .es_tax_tabs > ul > li a {
+      border: 1px solid #ddd;
+      padding: 6px 15px;
+      background: #ddd;
+      text-decoration: none;
+      -webkit-transition: all .4s;
+      -moz-transition: all .4s;
+      -ms-transition: all .4s;
+      -o-transition: all .4s;
+      transition: all .4s; }
+      .es_tax_tabs > ul > li a.active {
+        background-color: #ffffff;
+        border-bottom: 1px solid #fff;
+        box-shadow: 0 1px white; }
+.es_tax_tabs .es-tab-body {
+  display: none; }
+  .es_tax_tabs .es-tab-body.active {
+    display: block; }
+
+.upload_image_button {
+  width: 127px; }
 
 /*# sourceMappingURL=es-admin.css.map */

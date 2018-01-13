@@ -6,9 +6,10 @@
     }
 }
 
-.postbox-container{
+.postbox-container {
     @include clearfix;
 }
+
 .es-gallery-wrapper {
     margin: 10px -5px 0 -5px;
     &:after {
@@ -139,7 +140,7 @@
 .es_meta_field {
     margin-bottom: 15px;
     @include clearfix;
-    .es_textarea{
+    .es_textarea {
         width: 100%;
     }
     .input-group {
@@ -174,8 +175,7 @@
         input[type=text],
         input[type=number],
         input[type=email],
-        input[type=date]
-        {
+        input[type=date] {
             position: relative;
             z-index: 2;
             float: left;
@@ -333,7 +333,7 @@
 
 @media (max-width: 544px) {
     .es-slider-wrapper section {
-        &.active{
+        &.active {
             height: auto;
             overflow: auto;
 
@@ -346,5 +346,42 @@
     }
 }
 
+.es_tax_tabs {
+    > ul {
+        border-bottom: 1px solid #ddd;
+        > li {
+            display: inline-block;
+            margin-right: 10px;
+            a {
+
+                border: 1px solid #ddd;
+
+                padding: 6px 15px;
+                background: #ddd;
+                text-decoration: none;
+                -webkit-transition: all .4s;
+                -moz-transition: all .4s;
+                -ms-transition: all .4s;
+                -o-transition: all .4s;
+                transition: all .4s;
+                &.active {
+                    background-color: #ffffff;
+                    border-bottom: 1px solid #fff;
+                    box-shadow: 0 1px white;
+                }
+            }
+
+        }
+    }
+    .es-tab-body {
+        display: none;
+        &.active {
+            display: block;
+        }
+    }
+}
+.upload_image_button {
+    width: 127px;
+}
 
 
