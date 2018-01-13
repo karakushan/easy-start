@@ -328,13 +328,22 @@ function es_post_meta( $meta_key, $post_id = 0, $args = array() ) {
 			$post_meta    = $meta_img;
 			$args['echo'] = 0;
 			break;
-		default:
+		case "textarea":
 			if ( ! $args['raw'] ) {
 				$post_meta = apply_filters( 'the_content', $meta_value );
 			} else {
 				$post_meta = $meta_value;
 			}
-
+			break;
+		case "editor":
+			if ( ! $args['raw'] ) {
+				$post_meta = apply_filters( 'the_content', $meta_value );
+			} else {
+				$post_meta = $meta_value;
+			}
+			break;
+		default:
+			$post_meta = $meta_value;
 			break;
 	}
 

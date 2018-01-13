@@ -77,7 +77,11 @@ class ES_init {
 	}
 
 	function es_inc_scripts() {
-		wp_enqueue_style( 'easy-start', plugins_url() . '/easy-start/assets/css/es-style.css' );
+		wp_enqueue_script('easy-start',ES_DIR_URL."assets/js/easy-start.js",array("jquery"),null,true);
+		wp_enqueue_script('es-lightgallery',ES_DIR_URL."assets/plugins/lightGallery/dist/js/lightgallery-all.min.js",array("jquery"),null,true);
+
+		wp_enqueue_style( 'es-lightgallery', ES_DIR_URL. 'assets/plugins/lightGallery/dist/css/lightgallery.min.css' );
+		wp_enqueue_style( 'easy-start', ES_DIR_URL. 'assets/css/es-style.css' );
 	}
 
 	function es_admin_scripts() {
@@ -93,18 +97,7 @@ class ES_init {
 		), false, true );
 	}
 
-	function codemirror_enqueue_scripts() {
-		wp_enqueue_script( 'codemirror' );
-		wp_enqueue_style( 'codemirror' );
 
-		wp_enqueue_style( 'cm_blackboard' );
-
-		wp_enqueue_script( 'cm_xml' );
-		wp_enqueue_script( 'cm_javascript' );
-		wp_enqueue_script( 'cm_css' );
-		wp_enqueue_script( 'cm_php' );
-		wp_enqueue_script( 'cm_clike' );
-	}
 
 	function register_es_settings() {
 		register_setting( 'es-options-group', 'es-config-json' );

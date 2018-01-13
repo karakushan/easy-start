@@ -62,20 +62,27 @@ jQuery(function ($) {
 
     });
 
-    $(document).on('click', '[data-action="select-image"]', function (event) {
+    // загрузка изображения или файла из медиатеки
+    $(document).on('click', '[data-action="select-image"],[data-action="select-file"]', function (event) {
         event.preventDefault();
-        var send_attachment_bkp = wp.media.editor.send.attachment;
         var button = $(this);
+        var send_attachment_bkp = wp.media.editor.send.attachment;
         wp.media.editor.send.attachment = function (props, attachment) {
-            if (attachment.mime != "image/x-icon") {
-                button.css({
-                    'background-image': "url(" + attachment.url + ")"
-                });
-                $(button).find('input').val(attachment.id);
-            } else {
-                alert('Файл не является изображением');
+            // загрузка изображения
+            if (button.attr("data-action") == "select-image") {
+                if (attachment.mime != "image/x-icon") {
+                    button.css({
+                        'background-image': "url(" + attachment.url + ")"
+                    });
+                    $(button).find('input').val(attachment.id);
+                } else {
+                    alert('Файл не является изображением');
+                }
             }
-
+            // загрузка файла
+            if (button.attr("data-action") == "select-file") {
+                button.parents(".es_meta_field").find(".file").html("<img src='" + attachment.icon + "' alt='" + attachment.title + "'>");
+            }
             wp.media.editor.send.attachment = send_attachment_bkp;
         };
         wp.media.editor.open(button);
@@ -84,6 +91,7 @@ jQuery(function ($) {
     });
 
 
+    // вкладки языков
     $('.es_tax_tabs>ul>li>a').on('click', function (event) {
         event.preventDefault();
         $(this).parents('.es_tax_tabs').find('.es-tab-body').removeClass('active');
@@ -93,31 +101,12 @@ jQuery(function ($) {
         $(selector).addClass('active');
 
     });
-    /*
-     * действие при нажатии на кнопку загрузки изображения
-     * вы также можете привязать это действие к клику по самому изображению
-     */
-    $('.upload_image_button').click(function () {
-        var send_attachment_bkp = wp.media.editor.send.attachment;
-        var button = $(this);
-        wp.media.editor.send.attachment = function (props, attachment) {
-            if (attachment.mime != "image/x-icon") {
-                $(button).parents('.es_meta_field').find('.file img:first').attr('src', attachment.url).fadeIn();
-                $(button).prev().val(attachment.id);
-            } else {
-                alert('Файл не является изображением');
-            }
 
-            wp.media.editor.send.attachment = send_attachment_bkp;
-        };
-        wp.media.editor.open(button);
-        return false;
-    });
     /*
      * удаляем значение произвольного поля
      * если быть точным, то мы просто удаляем value у input type="hidden"
      */
-    $('.remove_image_button').click(function () {
+    $("[data-action='remove-atachment']").click(function () {
         var button = $(this);
         if (confirm("Подтверждаете?")) {
             button.parents('.es_meta_field').find('.file img:first').attr('src', button.data('no-image'));
@@ -185,44 +174,6 @@ jQuery(function ($) {
                 )
                 ;
             }
-        });
-        // Finally, open the modal on click
-        frame.open();
-
-    });
-
-    // slider
-    jQuery('body').on('click', '[data-es-action="add-image"]', function (e) {
-        e.preventDefault();
-        var imageFrame = jQuery(this);
-        var hiddenField = imageFrame.parents('.item').find('.image-id');
-        if (frame) {
-            frame.open();
-            return;
-        }
-
-        var frame;
-
-        // Create a new media frame
-        frame = wp.media({
-            title: 'Select image',
-            button: {
-                text: 'Add'
-            },
-            multiple: false
-        });
-        // When an image is selected in the media frame...
-        frame.on('select', function () {
-            // Get media attachment details from the frame state
-            var attachment = frame.state().get('selection').toJSON();
-            var imageUrl = attachment[0]['url'];
-            var imageId = attachment[0]['id'];
-            imageFrame.css({
-                'background-image': 'url(' + imageUrl + ')',
-                'background-size': 'cover'
-
-            });
-            hiddenField.val(imageId);
         });
         // Finally, open the modal on click
         frame.open();
