@@ -290,8 +290,13 @@ function es_post_meta( $meta_key, $post_id = 0, $args = array() ) {
 
 	//отдаём данные в зависимости от параметра $type
 	switch ( $args['type'] ) {
+
 		case 'image':
-			$post_meta = wp_get_attachment_url( $meta_value );
+			if ( is_numeric( $meta_value ) ) {
+				$post_meta = wp_get_attachment_url( $meta_value );
+			} else {
+				$post_meta = $meta_value;
+			}
 			break;
 		case 'file':
 			$post_meta = wp_get_attachment_url( $meta_value );
@@ -308,6 +313,11 @@ function es_post_meta( $meta_key, $post_id = 0, $args = array() ) {
 			$post_meta = date( $args['date_format'], strtotime( $meta_value ) );
 			break;
 		case "accordion":
+			$post_meta    = get_post_meta( $post_id, es_field_prefix( $meta_key ), 0 );
+			$post_meta    = ! empty( $post_meta[0] ) ? $post_meta[0] : array();
+			$args['echo'] = 0;
+			break;
+		case "multiple":
 			$post_meta    = get_post_meta( $post_id, es_field_prefix( $meta_key ), 0 );
 			$post_meta    = ! empty( $post_meta[0] ) ? $post_meta[0] : array();
 			$args['echo'] = 0;
@@ -434,7 +444,7 @@ function es_options( $key, $args = array() ) {
  *
  * @return [type]        html код поля формы
  */
-function es_field_template( $type = 'text', $name = '', $value, $args = array() ) {
+function es_field_template( $type = 'text', $name, $value, $args = array() ) {
 	$template = ES_DIR_PATH . "templates/field/" . $type . ".php";
 	$default  = array(
 		'style'         => '',
@@ -442,18 +452,68 @@ function es_field_template( $type = 'text', $name = '', $value, $args = array() 
 		'post_type'     => 'page',
 		'values'        => array(),
 		'textarea_rows' => 8,
+		'id'            => sanitize_title( $name ),
+		'placeholder'   => '',
+		'name'          => '',
+		'subfield'      => '',
+		'index'         => 0,
+		'data'          => array( 'data-name' => $name ),
 		'first_option'  => __( 'Please Select', 'easy-start' )
 	);
-	$args     = wp_parse_args( $args, $default );
+	if ( ! empty( $args['subfield'] ) ) {
+		$args['data']['data-name'] = $args['subfield'];
+	}
+	$args = wp_parse_args( $args, $default );
+
+	$data = es_parse_atts( $args['data'] );
 	switch ( $type ) {
 		case 'post':
 			$args['values'] = get_posts( array( 'post_type' => $args['post_type'], 'posts_per_page' => - 1 ) );
 			break;
 	}
-
 	if ( file_exists( $template ) ) {
 		include $template;
 	}
+}
+
+/**
+ * Создает атрибут name
+ *
+ * @param $name
+ * @param int $index
+ * @param string $subfield_name
+ */
+function es_field_name( $name, $index = 0, $subfield_name = '' ) {
+	$field_name = sprintf( 'easy[%s]', $name );
+	if ( ! empty( $subfield_name ) ) {
+		$field_name = sprintf( 'easy[%s][%d][%s]', $name, $index, $subfield_name );
+	}
+
+	echo esc_attr( $field_name );
+}
+
+/**
+ * парсит атрибуты из массива в строку
+ *
+ * @param array $atts
+ *
+ * @return string
+ */
+function es_parse_atts( $atts = array(), $prefix_data = false ) {
+	if ( empty( $atts ) || ! is_array( $atts ) ) {
+		return '';
+	}
+	$attribute = array();
+	foreach ( $atts as $key => $att ) {
+		if ( $prefix_data ) {
+			$attribute[] = 'data-' . sanitize_key( $key ) . '="' . $att . '"';
+		} else {
+			$attribute[] = sanitize_key( $key ) . '="' . esc_attr( $att ) . '"';
+		}
+	}
+	$atts_text = implode( ' ', $attribute );
+
+	return $atts_text;
 }
 
 /**

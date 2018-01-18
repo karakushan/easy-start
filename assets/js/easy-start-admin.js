@@ -8,7 +8,9 @@ jQuery(function ($) {
             var c = index;
             el.attr('data-index', c);
             el.find('.count').text(c);
-            el.find('.text').attr('name', "easy[" + name + "][" + c + "][text]");
+            el.find('input,textarea').each(function () {
+                jQuery(this).attr('name', "easy[" + name + "][" + c + "][" + jQuery(this).data('name') + "]")
+            })
             el.find('.title').attr('name', "easy[" + name + "][" + c + "][title]");
             el.find('.image-input').attr('name', "easy[" + name + "][" + c + "][image]");
         });
@@ -27,21 +29,8 @@ jQuery(function ($) {
 
         var count = slidesWrap.find('section').length;
         // console.log(count);
-        var section = "<section data-index='" + count + "'>" +
-            "<header> <span class=\"dashicons dashicons-plus\" data-action='open-section'></span>" +
-            "<span class='count'>" + count + "</span> " +
-            "<input name='easy[" + name + "][" + count + "][title]' class='title'>" +
-            "<span class=\"dashicons dashicons-dismiss\" data-action='remove-section'></span>" +
-            "</header>" +
-            "<div class='bottom'>" +
-            "<div class='image' title='добавить/заменить изображение' data-action=\"select-image\">" +
-            "<input type='hidden' name='easy[" + name + "][" + count + "][image]' class='image-input'> " +
-            "<span class=\"dashicons dashicons-plus-alt\"></span>" +
-            "</div>" +
-            "<textarea name='easy[" + name + "][" + count + "][text]' class='text' placeholder='Ваш текст или HTMl код'></textarea>" +
-            "</div> " +
-            "</section>";
-        slidesWrap.append(section);
+        var cloneSect = slidesWrap.find('section').last().clone();
+        cloneSect.appendTo(slidesWrap);
         slidesReIndex(slidesWrap.find('section'));
     });
 

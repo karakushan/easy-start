@@ -184,19 +184,6 @@ class ES_ctypes {
 							echo '<span class="input-group-addon">' . $field['before'] . '</span>';
 						}
 						switch ( $field['type'] ) {
-							case 'image' :
-								es_field_template( $field['type'], $field_name, $content );
-								break;
-							case 'text' :
-								if ( empty( $content ) && ! empty( $field['default'] ) ) {
-									$content = $field['default'];
-								}
-								echo '<input type="text"  name="easy[' . $field_name . ']" id="' . $editor_id . '" class="es_text" value="' . esc_html( $content ) . '">';
-								break;
-
-							case 'taxonomy' :
-								es_field_template( $field['type'], $field_name, $content, array( 'taxonomy' => $field['taxonomy'] ) );
-								break;
 							case 'checkbox' :
 								echo '<input type="hidden"  name="easy[' . $field_name . ']" id="hidden-' . $field_name . '" value="0" />';
 								echo '<input type="checkbox"  name="easy[' . $field_name . ']" id="' . $field_name . '" value="1" ' . checked( $content, 1, 0 ) . ' class="es_text"/>';
@@ -219,10 +206,6 @@ class ES_ctypes {
 							case 'week':
 								echo '<input type="week"  name="easy[' . $field_name . ']" id="' . $editor_id . '" class="es_text" value="' . $content . '" style="width:150px">';
 								break;
-							case 'file' :
-								es_field_template( $field['type'], $field_name, $content );
-								break;
-
 							default:
 								es_field_template( $field['type'], $field_name, $content, $field );
 								break;
