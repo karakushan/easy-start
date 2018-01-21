@@ -1,1 +1,1 @@
-<input type="text"  name="easy[<?php echo esc_attr($name) ?>]" <?php echo esc_attr($data) ?> id="<?php echo esc_attr($args['id']) ?>" placeholder="<?php echo esc_attr($args['placeholder']) ?>" class="es_text" value="<?php echo esc_attr( $value ) ?>">
+<input type="text"  name="<?php es_field_name( $name, $args['index'], $args['subfield'] ) ?>" <?php echo esc_attr($data) ?> id="<?php echo esc_attr($args['id']) ?>" placeholder="<?php echo esc_attr($args['placeholder']) ?>" class="es_text" value="<?php echo esc_attr( $value ) ?>">
