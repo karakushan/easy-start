@@ -220,8 +220,6 @@ class ES_ctypes {
 						}
 						echo "<div class='es_field_desc'><em>" . esc_attr( $field['desc'] ) . "</em></div>";
 						echo "</div>";
-
-
 					}
 				}
 

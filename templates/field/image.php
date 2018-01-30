@@ -10,7 +10,7 @@ if ( empty( $value ) ) {
 ?>
 <div class="file"><?php echo $src; ?></div>
 <div>
-  <input type="hidden" name="easy[<?php echo $name ?>]" value="<?php echo $value ?>"/>
+  <input type="hidden" name="<?php es_field_name( $name, $args['index'], $args['subfield'] ) ?>"  <?php echo $data ?> value="<?php echo $value ?>"/>
   <button type="button" class="upload_image_button button button-primary" data-action="select-image"
           title="добавить изображение"
           style="width: 126px;">

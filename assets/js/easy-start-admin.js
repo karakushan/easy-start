@@ -55,15 +55,19 @@ jQuery(function ($) {
     $(document).on('click', '[data-action="select-image"],[data-action="select-file"]', function (event) {
         event.preventDefault();
         var button = $(this);
+        // родительский див
+        if(button.parents('.sub-field').length){
+            var buttonWrapper=button.parents('.sub-field');
+        }else{
+            var buttonWrapper=button.parents('.es_meta_field');
+        }
         var send_attachment_bkp = wp.media.editor.send.attachment;
         wp.media.editor.send.attachment = function (props, attachment) {
             // загрузка изображения
             if (button.attr("data-action") == "select-image") {
                 if (attachment.mime != "image/x-icon") {
-                    button.css({
-                        'background-image': "url(" + attachment.url + ")"
-                    });
-                    $(button).find('input').val(attachment.id);
+                    buttonWrapper.find('.file img').attr('src',attachment.url);
+                    $(button).prev().val(attachment.id);
                 } else {
                     alert('Файл не является изображением');
                 }

@@ -353,7 +353,11 @@ function es_post_meta( $meta_key, $post_id = 0, $args = array() ) {
 			}
 			break;
 		default:
-			$post_meta = $meta_value;
+			if ( ! $args['raw'] ) {
+				$post_meta = apply_filters( 'the_content', $meta_value );
+			} else {
+				$post_meta = $meta_value;
+			}
 			break;
 	}
 
