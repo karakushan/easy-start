@@ -74,7 +74,8 @@ jQuery(function ($) {
             }
             // загрузка файла
             if (button.attr("data-action") == "select-file") {
-                button.parents(".es_meta_field").find(".file").html("<img src='" + attachment.icon + "' alt='" + attachment.title + "'>");
+                $(button).prev().val(attachment.id);
+                buttonWrapper.find('.file img').attr('src',attachment.icon);
             }
             wp.media.editor.send.attachment = send_attachment_bkp;
         };
