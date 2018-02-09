@@ -41,31 +41,40 @@ class Es_taxonomies {
 		$config    = new Es_config;
 		$taxonomy  = get_term( $term )->taxonomy;
 		$fields    = $config->data["term_meta"][ $taxonomy ];
-		$languages = isset( $config->data["languages"] ) ? $config->data["languages"] : array();
-
+		$languages = ! empty( $config->data["languages"] ) ? $config->data["languages"] : array(
+			'ru_RU' => array(
+				'slug'    => 'ru',
+				'name'    => 'Русский',
+				'default' => 1
+			)
+		);
 
 		if ( count( $fields ) ):
 			foreach ( $fields as $key => $field ): ?>
               <tr class="form-field es_meta_field">
                 <th scope="row" valign="top"><label
-                    for="<?php echo $key ?>"><?php echo esc_attr( $field['name'] ) ?></label>
+                    for="<?php echo esc_attr( $key ) ?>"><?php echo esc_attr( $field['name'] ) ?></label>
                 </th>
                 <td>
 					<?php
 					if ( ! empty( $languages ) ) {
-						echo "<div class=\"es_tax_tabs\"><ul>";
-						$k = 1;
-						foreach ( $languages as $lks => $langw ) {
-							$field_name = es_field_prefix( $key, $lks );
-							$tab_class  = $k == 1 ? 'active' : '';
-							echo "<li><a href=\"#es-tab-" . esc_attr( $field_name ) . "\" class=\"" . esc_attr( $tab_class ) . "\">" . esc_attr( $langw['name'] ) . "</a></li>";
-							$k ++;
+
+
+						if ( count( $languages ) > 1 ) {
+							$k = 1;
+							echo "<div class=\"es_tax_tabs\"><ul>";
+							foreach ( $languages as $lks => $langw ) {
+								$field_name = es_field_prefix( $key, $lks );
+								$tab_class  = $k == 1 ? 'active' : '';
+								echo "<li><a href=\"#es-tab-" . esc_attr( $field_name ) . "\" class=\"" . esc_attr( $tab_class ) . "\">" . esc_attr( $langw['name'] ) . "</a></li>";
+								$k ++;
+							}
+							echo "</ul>";
+							unset( $k );
 						}
-						echo "</ul>";
-						unset( $k );
+
 						$i = 1;
 						foreach ( $languages as $lk => $lang ) {
-
 							$field_name = es_field_prefix( $key, $lk );
 							$tab_class2 = $i == 1 ? 'active' : '';
 							$content    = get_term_meta( $term->term_id, $field_name, 1 );
@@ -80,39 +89,26 @@ class Es_taxonomies {
 								}
 							}
 
-							echo "<div id=\"es-tab-{$field_name}\" class=\"es-tab-body $tab_class2\">";
+							echo '<div id="es-tab-' . esc_attr( $field_name ) . '" class="es-tab-body ' . esc_attr( $tab_class2 ) . '">';
 
-							switch ( $field['type'] ) {
-
-								case 'editor':
-									$editor_id = mb_strtolower( str_replace( array( '_' ), array( '-' ), $field_name ) );
-									$content   = wp_unslash( htmlspecialchars_decode( get_term_meta( $term->term_id, $field_name, 1 ) ) );
-
-									wp_editor( $content, $editor_id, array(
-										'wpautop'       => false,
-										'media_buttons' => 1,
-										'textarea_name' => 'easy[' . $field_name . ']',
-										'tinymce'       => array(
-											'verify_html' => false
-										)
-									) );
-									break;
-								case 'checkbox' :
-									es_field_template( $field['type'], $field_name, $content );
-									break;
-								case 'select':
-									es_field_template( $field['type'], $field_name, $content, array( 'values' => $field['values'] ) );
-									break;
-								case 'taxonomy' :
-									es_field_template( $field['type'], $field_name, $content, array( 'taxonomy' => $field['taxonomy'] ) );
-									break;
-								case 'image':
-									es_field_template( $field['type'], $field_name, $content );
-									break;
-								default:
-									echo "<input type=\"text\" name=\"easy[" . $field_name . "]\" value=\"" . get_term_meta( $term->term_id, $field_name, 1 ) . "\">";
-									break;
+							// Прессет поля типа слайдер
+							if ( $field['type'] == 'slider' ) {
+								$field['type']   = 'multiple';
+								$field['fields'] = array(
+									'title' => array( 'type' => 'text', 'name' => __( 'Title', 'easy-start' ) ),
+									'image' => array( 'type' => 'image', 'name' => __( 'Image', 'easy-start' ) ),
+									'text'  => array( 'type' => 'textarea', 'name' => __( 'Text', 'easy-start' ) ),
+									'link'  => array( 'type' => 'text', 'name' => __( 'Link', 'easy-start' ), )
+								);
+							} elseif ( $field['type'] == 'accordion' ) {
+								$field['type']   = 'multiple';
+								$field['fields'] = array(
+									'title' => array( 'type' => 'text', 'name' => __( 'Title', 'easy-start' ) ),
+									'text'  => array( 'type' => 'textarea', 'name' => __( 'Text', 'easy-start' ) )
+								);
 							}
+
+							es_field_template( $field['type'], $field_name, $content, $field );
 
 
 							echo "</div>";
@@ -120,60 +116,10 @@ class Es_taxonomies {
 						}
 						unset( $i );
 						echo "</div>";
-					} else {
-						$field_name = $key;
-						$content    = get_term_meta( $term->term_id, $field_name, 1 );
-						$content    = wp_unslash( $content );
-						// если значение мета поля пустое
-						if ( empty( $content ) ) {
-							if ( isset( $field['default'] ) && $field['default'] == 'es_block' ) {
-								$content = ! empty( $field['es_block'] ) ? es_get_block( $field['es_block'] ) : '';
-							} else {
-								if ( ! empty( $field['default'] ) ) {
-									$content = $field['default'];
-								}
-							}
-						}
-						switch ( $field['type'] ) {
-							case 'editor':
-								$editor_id = mb_strtolower( str_replace( array( '-', '_' ), array( '', '' ), $key ) );
-								wp_editor( $content, $editor_id, array(
-									'wpautop'       => false,
-									'media_buttons' => 1,
-									'textarea_name' => 'easy[' . $field_name . ']',
-									'tinymce'       => array(
-										'verify_html' => false
-									)
-								) );
-								break;
-							case 'taxonomy' :
-								es_field_template( $field['type'], $field_name, $content, array( 'taxonomy' => $field['taxonomy'] ) );
-								break;
-							case 'image':
-								es_field_template( $field['type'], $field_name, $content );
-								break;
-							case 'gallery':
-								es_field_template( $field['type'], $field_name, $content );
-								break;
-							case 'checkbox' :
-								es_field_template( $field['type'], $field_name, $content );
-								break;
-							case 'select':
-								es_field_template( $field['type'], $field_name, $content, array( 'values' => $field['values'] ) );
-								break;
-							case 'taxonomy' :
-								es_field_template( $field['type'], $field_name, $content, array( 'taxonomy' => $field['taxonomy'] ) );
-								break;
-							default:
-								echo "<input type=\"text\" name=\"easy[" . esc_attr( $field_name ) . "]\" value=\"" . esc_attr( $content ) . "\">";
-								break;
-						}
 					}
-
-
 					?>
                   <br/>
-                  <span class="description"><?php echo $field['desc'] ?></span>
+                  <span class="description"><?php echo esc_html( $field['desc'] ) ?></span>
                 </td>
               </tr>
 

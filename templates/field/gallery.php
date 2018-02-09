@@ -1,7 +1,7 @@
 <div class="es-meta-gallery">
-  <p><?php _e( 'You can drag and drop the images changing their position.', 'easy-start' ) ?></p>
+  <p><?php esc_attr_e( 'You can drag and drop the images changing their position.', 'easy-start' ) ?></p>
   <button class="es-add-gallery button"
-          data-name="<?php echo $name ?>"><?php _e( 'Add images', 'easy-start' ) ?></button>
+          data-name="<?php echo esc_attr( $name ) ?>"><?php _e( 'Add images', 'easy-start' ) ?></button>
   <div class="es-gallery-wrapper">
 	  <?php if ( ! empty( $value ) ): ?>
 		  <?php foreach ( $value as $key => $img ): ?>

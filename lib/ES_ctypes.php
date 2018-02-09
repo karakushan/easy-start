@@ -155,7 +155,7 @@ class ES_ctypes {
 					} else {
 						$class = '';
 					}
-					echo "<li><a href=\"#es-tab-{$lang['slug']}\" class=\"{$class}\">{$lang['name']}</a></li>";
+					echo '<li><a href="#es-tab-' . esc_attr( $lang['slug'] ) . '" class="' . esc_attr( $class ) . '">' . esc_attr( $lang['name'] ) . '</a></li>';
 				}
 				echo "</ul>";
 			}
@@ -174,14 +174,13 @@ class ES_ctypes {
 				if ( ! empty( $meta_fields ) ) {
 					foreach ( $meta_fields as $key => $field ) {
 						$field_name = es_field_prefix( $key, $lang_key );
-						$editor_id  = mb_strtolower( str_replace( array( '_' ), array( '-' ), $field_name ) );
 						$content    = wp_unslash( get_post_meta( $post->ID, $field_name, 1 ) );
 
 						echo "<div class='es_meta_field'>";
-						echo "<label for=\"" . esc_attr( $field_name ) . "\">" . $field['name'] . " {$lang_name}</label>";
+						echo '<label for=" ' . esc_attr( $field_name ) . '">' . esc_attr( $field['name'] ) . '</label>';
 						if ( ! empty( $field['before'] ) ) {
 							echo '<div class="input-group">';
-							echo '<span class="input-group-addon">' . $field['before'] . '</span>';
+							echo '<span class="input-group-addon">' . esc_attr( $field['before'] ) . '</span>';
 						}
 						// Прессет поля типа слайдер
 						if ( $field['type'] == 'slider' ) {
@@ -190,9 +189,14 @@ class ES_ctypes {
 								'title' => array( 'type' => 'text', 'name' => __( 'Title', 'easy-start' ) ),
 								'image' => array( 'type' => 'image', 'name' => __( 'Image', 'easy-start' ) ),
 								'text'  => array( 'type' => 'textarea', 'name' => __( 'Text', 'easy-start' ) ),
-								'link'  => array( 'type' => 'text', 'name' => __( 'Link', 'easy-start' ), ),
+								'link'  => array( 'type' => 'text', 'name' => __( 'Link', 'easy-start' ), )
 							);
-
+						} elseif ( $field['type'] == 'accordion' ) {
+							$field['type']   = 'multiple';
+							$field['fields'] = array(
+								'title' => array( 'type' => 'text', 'name' => __( 'Title', 'easy-start' ) ),
+								'text'  => array( 'type' => 'textarea', 'name' => __( 'Text', 'easy-start' ) )
+							);
 						}
 
 						es_field_template( $field['type'], $field_name, $content, $field );

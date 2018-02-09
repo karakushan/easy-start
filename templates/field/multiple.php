@@ -15,8 +15,8 @@
           <section data-index='<?php echo esc_attr( $count ) ?>' data-name="<?php echo esc_attr( $name ) ?>">
             <header>
               <span class="dashicons dashicons-plus" data-action='open-section'></span>
-              <span class='count'><?php echo $count ?></span>
-              <input name='easy[<?php echo esc_attr( $name ) ?>][<?php echo $count ?>][title]' class='title'
+              <span class='count'><?php echo esc_attr( $count ) ?></span>
+              <input name='easy[<?php echo esc_attr( $name ) ?>][<?php echo esc_attr( $count ) ?>][title]' class='title'
                      placeholder="<?php echo esc_attr( $title ) ?>" value="<?php echo esc_attr( $val['title'] ) ?>">
               <span class="dashicons dashicons-dismiss" data-action='remove-section'></span>
             </header>
@@ -30,7 +30,7 @@
 						$field_name = $name . '[' . $count . '][' . $key;
 						echo '<div class="sub-field full">';
 						if ( ! empty( $field['name'] ) ) {
-							echo "<label for=\"" . sanitize_title( $field_name ) . "\">" . $field['name'] . " </label>";
+							echo '<label for="' . esc_attr( $field_name ) . '">' . esc_attr( $field['name'] ) . '</label>';
 						}
 						$field['subfield'] = $key;
 						$field['index']    = $count;

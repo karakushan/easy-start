@@ -12,17 +12,18 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return string выводит текст блока
  */
 function es_block( $block_id = 0, $args = array() ) {
-	$args     = wp_parse_args( $args, array(
+	$args = wp_parse_args( $args, array(
 		'type'  => 'text',
 		'raw'   => false,
 		'class' => 'es-block'
 	) );
-	$query    = new WP_Query;
-	$es_posts = $query->query( array(
-		'p'         => $block_id,
-		'post_type' => 'es_blocks',
 
-	) );
+	$filter = 'display';
+	if ( $args['raw'] ) {
+		$filter = 'raw';
+	}
+	$es_post = get_post( $block_id, OBJECT, $args['raw'], $filter );
+
 	switch ( $args['type'] ) {
 		case 'text':
 			$edit_link = esc_url( get_edit_post_link( $block_id ) );
@@ -35,6 +36,7 @@ function es_block( $block_id = 0, $args = array() ) {
 			$edit_link = esc_url( get_edit_post_link( $block_id ) );
 			break;
 	}
+
 	$class = ! empty( $args['class'] ) ? 'class="' . esc_attr( $args['class'] ) . '"' : "";
 
 	if ( current_user_can( 'edit_posts' ) ) {
@@ -42,18 +44,13 @@ function es_block( $block_id = 0, $args = array() ) {
 		printf( '<div data-es-type="es_editor"><a href="%1$s" target="_blank">%2$s</a></div>', esc_attr( $edit_link ), esc_attr__( 'edit block', 'easy-start' ) );
 	}
 
-	foreach ( $es_posts as $es_post ) {
-		$content = sanitize_post_field( 'post_content', $es_post->post_content, $block_id, 'raw' );
-		if ( ! $args['raw'] ) {
-			$content = sanitize_post_field( 'post_content', $es_post->post_content, $block_id, 'display' );
-		}
-		echo $content;
+	echo sanitize_post_field( 'post_content', $es_post->post_content, $block_id, 'display' );
 
-		if ( current_user_can( 'edit_posts' ) ) {
-			echo "</div>";
-		}
-
+	if ( current_user_can( 'edit_posts' ) ) {
+		echo "</div>";
 	}
+
+
 }
 
 function es_get_block( $block_id ) {
@@ -226,9 +223,9 @@ function es_term_meta( $key, $term_id = 0, $args = array() ) {
 
 	}
 	if ( $args['echo'] ) {
-		echo wp_unslash( $term_meta );
+		echo $term_meta;
 	} else {
-		return wp_unslash( $term_meta );
+		return $term_meta;
 	}
 
 
@@ -425,7 +422,7 @@ function es_options( $key, $args = array() ) {
 
 
 	if ( $args['echo'] == true ) {
-		echo esc_html($options_value);
+		echo esc_html( $options_value );
 	} else {
 		return $options_value;
 	}

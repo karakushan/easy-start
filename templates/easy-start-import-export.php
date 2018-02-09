@@ -1,5 +1,5 @@
 <div class="wrap">
-  <h2><?php _e( 'Export', 'easy-start' ) ?></h2>
+  <h2><?php esc_attr_e( 'Export', 'easy-start' ) ?></h2>
 	<?php
 	$config       = new \ES_LIB\ES_config();
 	$config_file  = json_encode( $config->data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
