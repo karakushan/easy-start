@@ -183,35 +183,19 @@ class ES_ctypes {
 							echo '<div class="input-group">';
 							echo '<span class="input-group-addon">' . $field['before'] . '</span>';
 						}
-						switch ( $field['type'] ) {
-							case 'checkbox' :
-								echo '<input type="hidden"  name="easy[' . $field_name . ']" id="hidden-' . $field_name . '" value="0" />';
-								echo '<input type="checkbox"  name="easy[' . $field_name . ']" id="' . $field_name . '" value="1" ' . checked( $content, 1, 0 ) . ' class="es_text"/>';
-								break;
-							case 'select':
-								echo '<select name="easy[' . $key . ']">';
-								echo '<option value="">выбрать из списка</option>';
-								foreach ( $field['values'] as $sel_key => $sel ) {
-									echo '<option value="' . $sel_key . '" ' . selected( $sel_key, $content, 0 ) . '>' . $sel . '</option>';
-								}
-								echo '</select>';
-								break;
-							case 'date':
-								echo '<input type="date"  name="easy[' . $field_name . ']" id="' . $editor_id . '" class="es_text" value="' . $content . '" style="width:150px">';
-								break;
-
-							case 'time':
-								echo '<input type="time"  name="easy[' . $field_name . ']" id="' . $editor_id . '" class="es_text" value="' . $content . '" style="width:150px">';
-								break;
-							case 'week':
-								echo '<input type="week"  name="easy[' . $field_name . ']" id="' . $editor_id . '" class="es_text" value="' . $content . '" style="width:150px">';
-								break;
-							default:
-								es_field_template( $field['type'], $field_name, $content, $field );
-								break;
-
+						// Прессет поля типа слайдер
+						if ( $field['type'] == 'slider' ) {
+							$field['type']   = 'multiple';
+							$field['fields'] = array(
+								'title' => array( 'type' => 'text', 'name' => __( 'Title', 'easy-start' ) ),
+								'image' => array( 'type' => 'image', 'name' => __( 'Image', 'easy-start' ) ),
+								'text'  => array( 'type' => 'textarea', 'name' => __( 'Text', 'easy-start' ) ),
+								'link'  => array( 'type' => 'text', 'name' => __( 'Link', 'easy-start' ), ),
+							);
 
 						}
+
+						es_field_template( $field['type'], $field_name, $content, $field );
 						if ( ! empty( $field['after'] ) ) {
 							echo '<span class="input-group-addon">' . esc_attr( $field['after'] ) . '</span>';
 						}

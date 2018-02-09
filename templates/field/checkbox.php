@@ -1,1 +1,1 @@
-<input type="checkbox"  name="easy[<?php echo $name ?>]" id="es-field-<?php echo $name ?>" value="1" <?php checked($value,1) ?> class="es_text"/>
+<input type="checkbox"  name="<?php es_field_name( $name, $args['index'], $args['subfield'] ) ?>" id="<?php echo esc_attr($args['id']) ?>" value="1" <?php checked($value,1) ?> class="es_text"/>

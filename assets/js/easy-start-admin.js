@@ -56,17 +56,22 @@ jQuery(function ($) {
         event.preventDefault();
         var button = $(this);
         // родительский див
-        if(button.parents('.sub-field').length){
-            var buttonWrapper=button.parents('.sub-field');
-        }else{
-            var buttonWrapper=button.parents('.es_meta_field');
+        if (button.parents('.sub-field').length) {
+            var buttonWrapper = button.parents('.sub-field');
+        } else {
+            var buttonWrapper = button.parents('.es_meta_field');
         }
+
         var send_attachment_bkp = wp.media.editor.send.attachment;
         wp.media.editor.send.attachment = function (props, attachment) {
             // загрузка изображения
             if (button.attr("data-action") == "select-image") {
                 if (attachment.mime != "image/x-icon") {
-                    buttonWrapper.find('.file img').attr('src',attachment.url);
+                    var url = attachment.url;
+                    if (Object.keys(attachment.sizes).length) {
+                        url = attachment.sizes.thumbnail.url;
+                    }
+                    buttonWrapper.find('.file img').attr('src', url);
                     $(button).prev().val(attachment.id);
                 } else {
                     alert('Файл не является изображением');
@@ -75,7 +80,7 @@ jQuery(function ($) {
             // загрузка файла
             if (button.attr("data-action") == "select-file") {
                 $(button).prev().val(attachment.id);
-                buttonWrapper.find('.file img').attr('src',attachment.icon);
+                buttonWrapper.find('.file img').attr('src', attachment.icon);
             }
             wp.media.editor.send.attachment = send_attachment_bkp;
         };
@@ -88,6 +93,7 @@ jQuery(function ($) {
     // вкладки языков
     $('.es_tax_tabs>ul>li>a').on('click', function (event) {
         event.preventDefault();
+
         $(this).parents('.es_tax_tabs').find('.es-tab-body').removeClass('active');
         $(this).parents('ul').find('a').removeClass('active');
         $(this).addClass('active');
@@ -100,11 +106,17 @@ jQuery(function ($) {
      * удаляем значение произвольного поля
      * если быть точным, то мы просто удаляем value у input type="hidden"
      */
-    $("[data-action='remove-atachment']").click(function () {
+    $(document).on('click', "[data-action='remove-atachment']", function () {
         var button = $(this);
+        // родительский див
+        if (button.parents('.sub-field').length) {
+            var buttonWrapper = button.parents('.sub-field');
+        } else {
+            var buttonWrapper = button.parents('.es_meta_field');
+        }
         if (confirm("Подтверждаете?")) {
-            button.parents('.es_meta_field').find('.file img:first').attr('src', button.data('no-image'));
-            button.prev().prev().val('');
+            buttonWrapper.find('.file img:first').attr('src', button.data('no-image'));
+            buttonWrapper.find('input').val('');
         }
         return false;
     });
