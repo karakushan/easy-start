@@ -35,26 +35,25 @@ function es_block( $block_id = 0, $args = array() ) {
 			$edit_link = esc_url( get_edit_post_link( $block_id ) );
 			break;
 	}
-	$class = ! empty( $args['class'] ) ? 'class="' . $args['class'] . '"' : "";
+	$class = ! empty( $args['class'] ) ? 'class="' . esc_attr( $args['class'] ) . '"' : "";
 
 	if ( current_user_can( 'edit_posts' ) ) {
-
-		echo "<div data-es-type='es_blocks' data-es-block=\"$block_id\" $class>";
-		echo "<div data-es-type='es_editor'><a href=\"$edit_link\" target=\"_blank\">" . __( 'edit block', 'easy-start' ) . "</a></div>";
+		printf( '<div data-es-type="es_blocks" data-es-block="%1$s" %2$s>', esc_attr( $block_id ), esc_attr( $class ) );
+		printf( '<div data-es-type="es_editor"><a href="%1$s" target="_blank">%2$s</a></div>', esc_attr( $edit_link ), esc_attr__( 'edit block', 'easy-start' ) );
 	}
 
 	foreach ( $es_posts as $es_post ) {
-		$content = sanitize_post_field( 'post_content', $es_post->post_content, $block_id, 'display' );
+		$content = sanitize_post_field( 'post_content', $es_post->post_content, $block_id, 'raw' );
 		if ( ! $args['raw'] ) {
-			echo apply_filters( 'the_content', $content );
-		} else {
-			echo $content;
+			$content = sanitize_post_field( 'post_content', $es_post->post_content, $block_id, 'display' );
 		}
-	}
-	if ( current_user_can( 'edit_posts' ) ) {
-		echo "</div>";
-	}
+		echo $content;
 
+		if ( current_user_can( 'edit_posts' ) ) {
+			echo "</div>";
+		}
+
+	}
 }
 
 function es_get_block( $block_id ) {
@@ -76,16 +75,10 @@ function es_get_block( $block_id ) {
  * @param int $block_id
  */
 function es_block_title( $block_id = 0 ) {
-	$query    = new WP_Query;
-	$es_posts = $query->query( array(
-		'p'         => $block_id,
-		'post_type' => 'es_blocks'
-	) );
-
-	foreach ( $es_posts as $es_post ) {
-		$post_title = sanitize_post_field( 'post_title', $es_post->post_title, $block_id, 'display' );
-		echo apply_filters( 'the_title', $post_title );
+	if ( empty( $block_id ) ) {
+		return;
 	}
+	echo get_the_title( $block_id );
 }
 
 function es_transliteration( $str ) {
@@ -432,7 +425,7 @@ function es_options( $key, $args = array() ) {
 
 
 	if ( $args['echo'] == true ) {
-		echo $options_value;
+		echo esc_html($options_value);
 	} else {
 		return $options_value;
 	}

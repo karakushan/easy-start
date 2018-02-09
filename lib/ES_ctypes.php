@@ -169,7 +169,7 @@ class ES_ctypes {
 					} else {
 						$class_tab = '';
 					}
-					echo "<div id=\"es-tab-{$language['slug']}\" class=\"es-tab-body {$class_tab}\">";
+					echo '<div id="es-tab-' . esc_attr( $language['slug'] ) . '" class="es-tab-body ' . esc_attr( $class_tab ) . '">';
 				}
 				if ( ! empty( $meta_fields ) ) {
 					foreach ( $meta_fields as $key => $field ) {

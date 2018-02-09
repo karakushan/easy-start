@@ -12,7 +12,7 @@
 	  <?php if ( ! empty( $value ) ): ?>
 		  <?php $count = 0; ?>
 		  <?php foreach ( $value as $k => $val ): ?>
-          <section data-index='<?php echo $count ?>' data-name="<?php echo esc_attr( $name ) ?>">
+          <section data-index='<?php echo esc_attr( $count ) ?>' data-name="<?php echo esc_attr( $name ) ?>">
             <header>
               <span class="dashicons dashicons-plus" data-action='open-section'></span>
               <span class='count'><?php echo $count ?></span>

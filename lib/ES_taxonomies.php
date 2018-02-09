@@ -58,7 +58,7 @@ class Es_taxonomies {
 						foreach ( $languages as $lks => $langw ) {
 							$field_name = es_field_prefix( $key, $lks );
 							$tab_class  = $k == 1 ? 'active' : '';
-							echo "<li><a href=\"#es-tab-" . esc_attr( $field_name ) . "\" class=\"" . esc_attr( $tab_class ) . "\">".esc_attr($langw['name'])."</a></li>";
+							echo "<li><a href=\"#es-tab-" . esc_attr( $field_name ) . "\" class=\"" . esc_attr( $tab_class ) . "\">" . esc_attr( $langw['name'] ) . "</a></li>";
 							$k ++;
 						}
 						echo "</ul>";
@@ -165,7 +165,7 @@ class Es_taxonomies {
 								es_field_template( $field['type'], $field_name, $content, array( 'taxonomy' => $field['taxonomy'] ) );
 								break;
 							default:
-								echo "<input type=\"text\" name=\"easy[" . $field_name . "]\" value=\"" . $content . "\">";
+								echo "<input type=\"text\" name=\"easy[" . esc_attr( $field_name ) . "]\" value=\"" . esc_attr( $content ) . "\">";
 								break;
 						}
 					}
@@ -183,7 +183,7 @@ class Es_taxonomies {
 	}
 
 	function save_custom_taxonomy_meta( $term_id ) {
-		if ( ! isset( $_POST['easy'] ) ) {
+		if ( ! isset( $_POST['easy'] ) && ! wp_verify_nonce( $_POST['_wpnonce'] ) ) {
 			return;
 		}
 		$extra     = array_map( 'trim', $_POST['easy'] );
