@@ -13,16 +13,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function es_block( $block_id = 0, $args = array() ) {
 	$args = wp_parse_args( $args, array(
-		'type'  => 'text',
-		'raw'   => false,
-		'class' => 'es-block'
+		'type'   => 'text',
+		'class'  => 'es-block',
+		'filter' => 'the_content'
 	) );
 
-	$filter = 'display';
-	if ( $args['raw'] ) {
-		$filter = 'raw';
-	}
-	$es_post = get_post( $block_id, OBJECT, $args['raw'], $filter );
+	$es_post = get_post( $block_id, OBJECT, $args['raw'], 'display' );
 
 	switch ( $args['type'] ) {
 		case 'text':
@@ -44,7 +40,14 @@ function es_block( $block_id = 0, $args = array() ) {
 		printf( '<div data-es-type="es_editor"><a href="%1$s" target="_blank">%2$s</a></div>', esc_attr( $edit_link ), esc_attr__( 'edit block', 'easy-start' ) );
 	}
 
-	echo sanitize_post_field( 'post_content', $es_post->post_content, $block_id, 'display' );
+
+	$content = sanitize_post_field( 'post_content', $es_post->post_content, $block_id, 'display' );
+
+	if ( $args['filter'] ) {
+		$content = apply_filters( $args['filter'], $content );
+	}
+
+	echo $content;
 
 	if ( current_user_can( 'edit_posts' ) ) {
 		echo "</div>";
