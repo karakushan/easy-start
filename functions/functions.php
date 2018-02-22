@@ -252,7 +252,6 @@ function es_post_meta( $meta_key, $post_id = 0, $args = array() ) {
 		'default'     => '',
 		'type'        => 'text',
 		'es_block'    => '',
-		'raw'         => false,
 		'echo'        => true,
 		'filter'      => false,
 		'date_format' => 'd.m.Y'
@@ -331,31 +330,13 @@ function es_post_meta( $meta_key, $post_id = 0, $args = array() ) {
 			$post_meta    = $meta_img;
 			$args['echo'] = 0;
 			break;
-		case "textarea":
-			if ( ! $args['raw'] ) {
-				$post_meta = apply_filters( 'the_content', $meta_value );
-			} else {
-				$post_meta = $meta_value;
-			}
-			break;
-		case "editor":
-			if ( ! $args['raw'] ) {
-				$post_meta = apply_filters( 'the_content', $meta_value );
-			} else {
-				$post_meta = $meta_value;
-			}
-			break;
 		default:
-			if ( ! $args['raw'] ) {
-				$post_meta = apply_filters( 'the_content', $meta_value );
-			} else {
-				$post_meta = $meta_value;
-			}
+			$post_meta = $meta_value;
 			break;
 	}
 
 	if ( $args['filter'] ) {
-		$post_meta = apply_filters( 'es_meta_filter', $post_meta, $args['filter'] );
+		$post_meta = apply_filters( $args['filter'], $post_meta );
 	}
 
 	if ( $args['echo'] ) {
