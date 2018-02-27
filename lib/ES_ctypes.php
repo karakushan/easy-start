@@ -176,6 +176,10 @@ class ES_ctypes {
 						$field_name = es_field_prefix( $key, $lang_key );
 						$content    = wp_unslash( get_post_meta( $post->ID, $field_name, 1 ) );
 
+						if ( empty( $field['type'] ) ) {
+							$field['type'] = 'text';
+						}
+
 						echo "<div class='es_meta_field'>";
 						echo '<label for=" ' . esc_attr( $field_name ) . '">' . esc_attr( $field['name'] ) . '</label>';
 						if ( ! empty( $field['before'] ) ) {

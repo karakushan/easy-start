@@ -24,8 +24,11 @@
 				<?php if ( ! empty( $args['fields'] ) ) {
 
 					foreach ( $args['fields'] as $key => $field ) {
-						if ( $key == 'title' || empty( $field['type'] ) ) {
+						if ( $key == 'title' ) {
 							continue;
+						}
+						if ( empty( $field['type'] ) ) {
+							$field['type'] = 'text';
 						}
 						$field_name = $name . '[' . $count . '][' . $key;
 						echo '<div class="sub-field full">';
