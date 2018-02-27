@@ -17,7 +17,7 @@
           style="width: 126px;">
 	  <?php esc_attr_e( 'Add', 'easy-start' ) ?>
   </button>
-  <button type="button" class="remove_image_button button" title="удалить изображение"
+  <button type="button" class="button" title="<?php esc_attr_e('Delete image?','easy-start') ?>"
           data-no-image="<?php echo esc_attr( ES_NO_IMAGE_URL ) ?>" data-action='remove-atachment'>&times;
   </button>
 </div>

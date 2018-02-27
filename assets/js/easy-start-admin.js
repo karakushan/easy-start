@@ -110,11 +110,10 @@ jQuery(function ($) {
         } else {
             var buttonWrapper = button.parents('.es_meta_field');
         }
-        if (confirm("Подтверждаете?")) {
+        if (confirm(button.attr('title'))) {
             buttonWrapper.find('.file img:first').attr('src', button.data('no-image'));
             buttonWrapper.find('input').val('');
         }
-        return false;
     });
     //удаление изображений из галереи
     $('.es-gallery-wrapper').on('click', '.es-image-delete', function (e) {
