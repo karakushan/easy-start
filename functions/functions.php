@@ -225,6 +225,8 @@ function es_term_meta( $key, $term_id = 0, $args = array() ) {
 		}
 
 	}
+	$term_meta = wp_unslash( $term_meta );
+
 	if ( $args['echo'] ) {
 		echo $term_meta;
 	} else {
