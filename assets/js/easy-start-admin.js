@@ -67,8 +67,12 @@ jQuery(function ($) {
             // загрузка изображения
             if (button.attr("data-action") == "select-image") {
                 if (attachment.mime != "image/x-icon") {
+                    var url = attachment.url;
+                    if (Object.keys(attachment.sizes).length) {
+                        url = attachment.sizes.thumbnail.url;
+                    }
+                    buttonWrapper.find('.file img').attr('src', url);
                     $(button).prev().val(attachment.id);
-                    buttonWrapper.find('.file img').attr('src', attachment.url);
                 } else {
                     alert('Файл не является изображением');
                 }
@@ -102,16 +106,19 @@ jQuery(function ($) {
      * удаляем значение произвольного поля
      * если быть точным, то мы просто удаляем value у input type="hidden"
      */
-    $(document).on('click', "[data-action='remove-atachment']", function () {
+    $(document).on('click', "[data-action='remove-atachment']", function (e) {
+        e.preventDefault();
         var button = $(this);
+        var buttonWrapper = button.parents('.es_meta_field');
         // родительский див
         if (button.parents('.sub-field').length) {
-            var buttonWrapper = button.parents('.sub-field');
-        } else {
-            var buttonWrapper = button.parents('.es_meta_field');
+            buttonWrapper = button.parents('.sub-field');
+        } else if (button.parents('.es-tab-body').length) {
+            buttonWrapper = button.parents('.es-tab-body');
         }
-        if (confirm(button.attr('title'))) {
-            buttonWrapper.find('.file img:first').attr('src', button.data('no-image'));
+        if (confirm("Подтверждаете?")) {
+            console.log(buttonWrapper);
+            buttonWrapper.find('.file img').attr('src', button.data('no-image'));
             buttonWrapper.find('input').val('');
         }
     });

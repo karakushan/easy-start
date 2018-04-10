@@ -1,12 +1,6 @@
 <div class="es-slider-wrapper">
 	<?php
 	$title = ! empty( $args['fields']['title']['placeloder'] ) ? $args['fields']['title']['placeloder'] : __( 'Title', 'easy-start' );
-	// если нет секций, то создаём пустую, так как остальные создаются методом клонирования
-	if ( empty( $value ) ) {
-		foreach ( $args['fields'] as $sk => $field_start ) {
-			$value[0][ $sk ] = '';
-		}
-	}
 	?>
   <div class="es-slides es-sort" data-name="<?php echo esc_attr( $name ) ?>">
 	  <?php if ( ! empty( $value ) ): ?>
@@ -24,11 +18,8 @@
 				<?php if ( ! empty( $args['fields'] ) ) {
 
 					foreach ( $args['fields'] as $key => $field ) {
-						if ( $key == 'title' ) {
+						if ( $key == 'title' || empty( $field['type'] ) ) {
 							continue;
-						}
-						if ( empty( $field['type'] ) ) {
-							$field['type'] = 'text';
 						}
 						$field_name = $name . '[' . $count . '][' . $key;
 						echo '<div class="sub-field full">';
@@ -38,7 +29,9 @@
 						$field['subfield'] = $key;
 						$field['index']    = $count;
 						es_field_template( $field['type'], $name, $val[ $key ], $field );
-						echo "<div class='es_field_desc'><em>" . esc_attr( $field['desc'] ) . "</em></div>";
+						if ( ! empty( $field['desc'] ) ) {
+							echo "<div class='es_field_desc'><em>" . esc_attr( $field['desc'] ) . "</em></div>";
+						}
 						echo '</div>';
 					}
 				} ?>

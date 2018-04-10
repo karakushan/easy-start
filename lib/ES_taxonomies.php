@@ -78,7 +78,6 @@ class Es_taxonomies {
 							$field_name = es_field_prefix( $key, $lk );
 							$tab_class2 = $i == 1 ? 'active' : '';
 							$content    = get_term_meta( $term->term_id, $field_name, 1 );
-							$content    = wp_unslash($content);
 							// если значение мета поля пустое
 							if ( empty( $content ) ) {
 								if ( isset( $field['default'] ) && $field['default'] == 'es_block' ) {

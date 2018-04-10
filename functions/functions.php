@@ -225,8 +225,6 @@ function es_term_meta( $key, $term_id = 0, $args = array() ) {
 		}
 
 	}
-	$term_meta = wp_unslash( $term_meta );
-
 	if ( $args['echo'] ) {
 		echo $term_meta;
 	} else {
@@ -256,11 +254,12 @@ function es_post_meta( $meta_key, $post_id = 0, $args = array() ) {
 		'es_block'    => '',
 		'echo'        => true,
 		'filter'      => false,
-		'date_format' => 'd.m.Y'
-	);
-	$args     = wp_parse_args( $args, $defaults );
+		'date_format' => 'd.m.Y',
+		'lang'        => ''
+);
+	$args = wp_parse_args( $args, $defaults );
 
-	$meta_value = get_post_meta( $post_id, es_field_prefix( $meta_key ), 1 );
+	$meta_value = get_post_meta( $post_id, es_field_prefix( $meta_key,$args['lang'] ), 1 );
 
 //    если значения метаполя пусто ищем сначала в дефолтном значении а потом в поле без префикса языка
 	if ( empty( $meta_value ) ) {
@@ -307,23 +306,23 @@ function es_post_meta( $meta_key, $post_id = 0, $args = array() ) {
 			$post_meta = date( $args['date_format'], strtotime( $meta_value ) );
 			break;
 		case "accordion":
-			$post_meta    = get_post_meta( $post_id, es_field_prefix( $meta_key ), 0 );
+			$post_meta    = get_post_meta( $post_id, es_field_prefix( $meta_key,$args['lang'] ), 0 );
 			$post_meta    = ! empty( $post_meta[0] ) ? $post_meta[0] : array();
 			$args['echo'] = 0;
 			break;
 		case "multiple":
-			$post_meta    = get_post_meta( $post_id, es_field_prefix( $meta_key ), 0 );
+			$post_meta    = get_post_meta( $post_id, es_field_prefix( $meta_key ,$args['lang']), 0 );
 			$post_meta    = ! empty( $post_meta[0] ) ? $post_meta[0] : array();
 			$args['echo'] = 0;
 			break;
 		case "slider":
-			$post_meta    = get_post_meta( $post_id, es_field_prefix( $meta_key ), 0 );
+			$post_meta    = get_post_meta( $post_id, es_field_prefix( $meta_key,$args['lang'] ), 0 );
 			$post_meta    = wp_unslash( $post_meta );
 			$post_meta    = ! empty( $post_meta[0] ) ? $post_meta[0] : array();
 			$args['echo'] = 0;
 			break;
 		case "gallery":
-			$post_meta      = get_post_meta( $post_id, es_field_prefix( $meta_key ), 0 );
+			$post_meta      = get_post_meta( $post_id, es_field_prefix( $meta_key,$args['lang'] ), 0 );
 			$gallery_images = ! empty( $post_meta[0] ) ? $post_meta[0] : array();
 			$meta_img       = array();
 			foreach ( $gallery_images as $k => $images ) {

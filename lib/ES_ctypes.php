@@ -157,12 +157,9 @@ class ES_ctypes {
 					}
 					echo '<li><a href="#es-tab-' . esc_attr( $lang['slug'] ) . '" class="' . esc_attr( $class ) . '">' . esc_attr( $lang['name'] ) . '</a></li>';
 				}
-				echo "</ul>";
+				echo "</ul>"; // end tag <ul>
 			}
 			foreach ( $languages as $lang_key => $language ) {
-
-				$lang_name = count( $languages ) > 1 ? sprintf( '(%s)', $language['name'] ) : '';
-
 				if ( count( $languages ) > 1 ) {
 					if ( isset( $language['default'] ) && $language['default'] == 1 ) {
 						$class_tab = 'active';
@@ -176,15 +173,12 @@ class ES_ctypes {
 						$field_name = es_field_prefix( $key, $lang_key );
 						$content    = wp_unslash( get_post_meta( $post->ID, $field_name, 1 ) );
 
-						if ( empty( $field['type'] ) ) {
-							$field['type'] = 'text';
-						}
-
 						echo "<div class='es_meta_field'>";
 						echo '<label for=" ' . esc_attr( $field_name ) . '">' . esc_attr( $field['name'] ) . '</label>';
 						if ( ! empty( $field['before'] ) ) {
-							echo '<div class="input-group">';
-							echo '<span class="input-group-addon">' . esc_attr( $field['before'] ) . '</span>';
+							echo '<div class="es_meta_input-before">';
+							echo  esc_attr( $field['before'] );
+							echo '</div>';// end of class es_meta_input-before
 						}
 						// Прессет поля типа слайдер
 						if ( $field['type'] == 'slider' ) {
@@ -207,17 +201,15 @@ class ES_ctypes {
 						if ( ! empty( $field['after'] ) ) {
 							echo '<span class="input-group-addon">' . esc_attr( $field['after'] ) . '</span>';
 						}
-						if ( ! empty( $field['before'] ) || ! empty( $field['after'] ) ) {
-							echo '</div>';
-						}
 						echo "<div class='es_field_desc'><em>" . esc_attr( $field['desc'] ) . "</em></div>";
-						echo "</div>";
+						echo "</div>"; // end class es_meta_field
 					}
 				}
+				echo '</div>'; // end class es-tab-body
 
-				if ( count( $languages ) > 1 ) {
-					echo "</div>";
-				}
+			}
+			if ( count( $languages ) > 1 ) {
+				echo "</div>"; // end .es_tax_tabs
 			}
 		}
 
