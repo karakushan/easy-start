@@ -18,7 +18,7 @@ function es_block( $block_id = 0, $args = array() ) {
 		'filter' => 'the_content'
 	) );
 
-	$es_post = get_post( $block_id, OBJECT, $args['raw'], 'display' );
+	$es_post = get_post( $block_id, OBJECT,  'display' );
 
 	switch ( $args['type'] ) {
 		case 'text':
