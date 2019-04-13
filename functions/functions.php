@@ -3,11 +3,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
+use ES_LIB\ES_Start;
+
 /**
  * Функция выводит доступный для редактирования в фронтэнде блок из меню "Блоки"
  *
- * @param  integer $block_id - id блока
- * @param  array $args - массив аргументов
+ * @param integer $block_id - id блока
+ * @param array $args - массив аргументов
  *
  * @return string выводит текст блока
  */
@@ -18,7 +20,7 @@ function es_block( $block_id = 0, $args = array() ) {
 		'filter' => 'the_content'
 	) );
 
-	$es_post = get_post( $block_id, OBJECT,  'display' );
+	$es_post = get_post( $block_id, OBJECT, 'display' );
 
 	switch ( $args['type'] ) {
 		case 'text':
@@ -237,9 +239,9 @@ function es_term_meta( $key, $term_id = 0, $args = array() ) {
 /**
  * Выводит обработанное мета поле поста
  *
- * @param  string $meta_key - ключ поля
- * @param  int $post_id - id записи
- * @param  array $args - масив доп. настроек
+ * @param string $meta_key - ключ поля
+ * @param int $post_id - id записи
+ * @param array $args - масив доп. настроек
  *
  * @return string $post_meta - обработтаное значение поля
  */
@@ -256,10 +258,10 @@ function es_post_meta( $meta_key, $post_id = 0, $args = array() ) {
 		'filter'      => false,
 		'date_format' => 'd.m.Y',
 		'lang'        => ''
-);
-	$args = wp_parse_args( $args, $defaults );
+	);
+	$args     = wp_parse_args( $args, $defaults );
 
-	$meta_value = get_post_meta( $post_id, es_field_prefix( $meta_key,$args['lang'] ), 1 );
+	$meta_value = get_post_meta( $post_id, es_field_prefix( $meta_key, $args['lang'] ), 1 );
 
 //    если значения метаполя пусто ищем сначала в дефолтном значении а потом в поле без префикса языка
 	if ( empty( $meta_value ) ) {
@@ -306,23 +308,23 @@ function es_post_meta( $meta_key, $post_id = 0, $args = array() ) {
 			$post_meta = date( $args['date_format'], strtotime( $meta_value ) );
 			break;
 		case "accordion":
-			$post_meta    = get_post_meta( $post_id, es_field_prefix( $meta_key,$args['lang'] ), 0 );
+			$post_meta    = get_post_meta( $post_id, es_field_prefix( $meta_key, $args['lang'] ), 0 );
 			$post_meta    = ! empty( $post_meta[0] ) ? $post_meta[0] : array();
 			$args['echo'] = 0;
 			break;
 		case "multiple":
-			$post_meta    = get_post_meta( $post_id, es_field_prefix( $meta_key ,$args['lang']), 0 );
+			$post_meta    = get_post_meta( $post_id, es_field_prefix( $meta_key, $args['lang'] ), 0 );
 			$post_meta    = ! empty( $post_meta[0] ) ? $post_meta[0] : array();
 			$args['echo'] = 0;
 			break;
 		case "slider":
-			$post_meta    = get_post_meta( $post_id, es_field_prefix( $meta_key,$args['lang'] ), 0 );
+			$post_meta    = get_post_meta( $post_id, es_field_prefix( $meta_key, $args['lang'] ), 0 );
 			$post_meta    = wp_unslash( $post_meta );
 			$post_meta    = ! empty( $post_meta[0] ) ? $post_meta[0] : array();
 			$args['echo'] = 0;
 			break;
 		case "gallery":
-			$post_meta      = get_post_meta( $post_id, es_field_prefix( $meta_key,$args['lang'] ), 0 );
+			$post_meta      = get_post_meta( $post_id, es_field_prefix( $meta_key, $args['lang'] ), 0 );
 			$gallery_images = ! empty( $post_meta[0] ) ? $post_meta[0] : array();
 			$meta_img       = array();
 			foreach ( $gallery_images as $k => $images ) {
@@ -350,20 +352,15 @@ function es_post_meta( $meta_key, $post_id = 0, $args = array() ) {
 /**
  * возвращает название мета поля с префиксом для мультиязыков
  *
- * @param  string $meta_key название метаполя
- * @param  string $lang код локали язык в формате ru_RU
+ * @param string $meta_key название метаполя
+ * @param string $locale код локали язык в формате ru_RU
  *
  * @return string            название поля с префиксом
  */
-function es_field_prefix( $meta_key, $lang = '' ) {
-	$languages = \ES_LIB\ES_config::$languages;
-	if ( count( $languages ) ) {
-		if ( empty( $lang ) ) {
-			$lang = get_locale();
-		}
-		if ( ! empty( $lang ) && ! isset( $languages[ $lang ]['default'] ) ) {
-			$meta_key = $meta_key . '-' . $languages[ $lang ]['slug'];
-		}
+function es_field_prefix( $meta_key, $locale = '' ) {
+	$languages = ES_Start::get_languages();
+	if ( empty( $languages[ $locale ]['default'] ) ) {
+		$meta_key = sprintf( '%s-%s', $meta_key, $locale );
 	}
 
 	return $meta_key;
@@ -416,10 +413,10 @@ function es_options( $key, $args = array() ) {
 /**
  * подключает поле в метабоксе редактирования записи, категории
  *
- * @param  string $type тип поля
- * @param  смешанный $name атрибут name у поля формы
- * @param  смешанный $value значения поля value у элемента формы
- * @param  array $args дополнительные аргументы
+ * @param string $type тип поля
+ * @param смешанный $name атрибут name у поля формы
+ * @param смешанный $value значения поля value у элемента формы
+ * @param array $args дополнительные аргументы
  *
  * @return [type]        html код поля формы
  */

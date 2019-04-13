@@ -16,8 +16,8 @@ class Es_taxonomies {
 	}
 
 	public function term_meta_create() {
-		$config     = new ES_config;
-		$term_meta  = $config->data["term_meta"];
+		$config     = ES_Start::get_config();
+		$term_meta  = $config['term_meta'];
 		$taxonomies = isset( $config->data["taxonomies"] ) ? $config->data["taxonomies"] : array();
 
 		//Если задано в настройках доп. поля таксономии то создаём их
@@ -38,35 +38,27 @@ class Es_taxonomies {
 	}
 
 	function edit_new_custom_fields( $term ) {
-		$config    = new Es_config;
+
 		$taxonomy  = get_term( $term )->taxonomy;
-		$fields    = $config->data["term_meta"][ $taxonomy ];
-		$languages = ! empty( $config->data["languages"] ) ? $config->data["languages"] : array(
-			'ru_RU' => array(
-				'slug'    => 'ru',
-				'name'    => 'Русский',
-				'default' => 1
-			)
-		);
+		$fields    = ES_Start::get_config( 'term_meta' )[ $taxonomy ];
+		$languages = ES_Start::get_languages();
 
 		if ( count( $fields ) ):
 			foreach ( $fields as $key => $field ): ?>
-              <tr class="form-field es_meta_field">
-                <th scope="row" valign="top"><label
-                    for="<?php echo esc_attr( $key ) ?>"><?php echo esc_attr( $field['name'] ) ?></label>
-                </th>
-                <td>
-					<?php
-					if ( ! empty( $languages ) ) {
-
+                <tr class="form-field es_meta_field">
+                    <th scope="row" valign="top">
+                        <label for="<?php echo esc_attr( $key ) ?>"><?php echo esc_attr( $field['name'] ) ?></label>
+                    </th>
+                    <td>
+						<?php
 
 						if ( count( $languages ) > 1 ) {
 							$k = 1;
 							echo "<div class=\"es_tax_tabs\"><ul>";
-							foreach ( $languages as $lks => $langw ) {
-								$field_name = es_field_prefix( $key, $lks );
+							foreach ( $languages as $locale => $language ) {
+								$field_name = es_field_prefix( $key, $locale );
 								$tab_class  = $k == 1 ? 'active' : '';
-								echo "<li><a href=\"#es-tab-" . esc_attr( $field_name ) . "\" class=\"" . esc_attr( $tab_class ) . "\">" . esc_attr( $langw['name'] ) . "</a></li>";
+								echo "<li><a href=\"#es-tab-" . esc_attr( $field_name ) . "\" class=\"" . esc_attr( $tab_class ) . "\">" . esc_attr( $language['name'] ) . "</a></li>";
 								$k ++;
 							}
 							echo "</ul>";
@@ -74,8 +66,8 @@ class Es_taxonomies {
 						}
 
 						$i = 1;
-						foreach ( $languages as $lk => $lang ) {
-							$field_name = es_field_prefix( $key, $lk );
+						foreach ( $languages as $locale => $language ) {
+							$field_name = es_field_prefix( $key, $locale );
 							$tab_class2 = $i == 1 ? 'active' : '';
 							$content    = get_term_meta( $term->term_id, $field_name, 1 );
 							// если значение мета поля пустое
@@ -116,14 +108,14 @@ class Es_taxonomies {
 						}
 						unset( $i );
 						echo "</div>";
-					}
-					?>
-                  <br/>
-                  <span class="description"><?php echo esc_html( $field['desc'] ) ?></span>
-                </td>
-              </tr>
 
-				<?php
+						?>
+                        <br/>
+                        <span class="description"><?php echo esc_html( $field['desc'] ) ?></span>
+                    </td>
+                </tr>
+
+			<?php
 			endforeach;
 		endif;
 	}
@@ -133,10 +125,10 @@ class Es_taxonomies {
 			return;
 		}
 		$extra     = array_map( 'trim', $_POST['easy'] );
-		$config    = new Es_config;
+		$config    = ES_Start::get_config();
 		$taxonomy  = get_term( $term_id )->taxonomy;
-		$languages = Es_config::$languages;
-		$fields    = $config->data["term_meta"][ $taxonomy ];
+		$languages = ES_Start::get_languages();
+		$fields    = $config["term_meta"][ $taxonomy ];
 		if ( count( $languages ) > 1 ) {
 			foreach ( $languages as $lang_key => $lang ) {
 				foreach ( $fields as $m_key => $value ) {

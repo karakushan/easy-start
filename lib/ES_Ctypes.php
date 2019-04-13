@@ -1,15 +1,11 @@
 <?php
+/**
+ * Class ES_Ctypes
+ * @package ES_LIB
+ */
 
 namespace ES_LIB;
-
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-} // Exit if accessed directly
-
-/**
- * class ES_init
- */
-class ES_ctypes {
+class ES_Ctypes {
 	function __construct() {
 		add_action( 'init', array( $this, 'es_post_types' ) );
 		add_action( 'add_meta_boxes', array( $this, 'es_post_metaboxes' ) );
@@ -17,8 +13,8 @@ class ES_ctypes {
 	}
 
 	function es_post_types() {
-		$config      = new ES_config();
-		$custom_post = isset( $config->data["custom_post"] ) ? $config->data["custom_post"] : array();
+		$config      = ES_Start::get_config();
+		$custom_post = isset( $config["custom_post"] ) ? $config["custom_post"] : array();
 
 		$args = array(
 			'label'               => __( 'Blocks', 'easy-start' ),
@@ -86,9 +82,11 @@ class ES_ctypes {
 	}
 
 	function es_post_metaboxes() {
-		$config = new Es_config();
 		global $post;
-		$meta_boxes = isset( $config->data["meta_boxes"] ) ? $config->data["meta_boxes"] : array();
+		$config = ES_Start::get_config();
+
+
+		$meta_boxes = isset( $config["meta_boxes"] ) ? $config["meta_boxes"] : array();
 
 		//Добавляем метабокс
 		if ( $meta_boxes ) {
@@ -129,18 +127,9 @@ class ES_ctypes {
 	}
 
 	function es_meta_block( $post, $callback ) {
-
-
-		$config      = new Es_config();
 		$meta_fields = $callback['args']['post_meta'];
 		$box_num     = $callback['args']['box_num'];
-		$languages   = ! empty( $config->data["languages"] ) ? $config->data["languages"] : array(
-			'ru_RU' => array(
-				'slug'    => 'ru',
-				'name'    => 'Русский',
-				'default' => 1
-			)
-		);
+		$languages   = ES_Start::get_languages();
 
 		echo '<input type="hidden" name="easy[es_box_num]" value="' . esc_attr( $box_num ) . '">';
 		wp_nonce_field( plugin_basename( __FILE__ ), 'es_nonce' );
@@ -177,7 +166,7 @@ class ES_ctypes {
 						echo '<label for=" ' . esc_attr( $field_name ) . '">' . esc_attr( $field['name'] ) . '</label>';
 						if ( ! empty( $field['before'] ) ) {
 							echo '<div class="es_meta_input-before">';
-							echo  esc_attr( $field['before'] );
+							echo esc_attr( $field['before'] );
 							echo '</div>';// end of class es_meta_input-before
 						}
 						// Прессет поля типа слайдер
@@ -216,7 +205,12 @@ class ES_ctypes {
 
 	}
 
-// сохраняем наши мета поля
+
+	/**
+	 * Save meta fields values
+	 *
+	 * @param $postID
+	 */
 	function es_post_save( $postID ) {
 		// проверяем nonce нашей страницы, потому что save_post может быть вызван с другого места.
 		if ( ! wp_verify_nonce( $_POST['es_nonce'], plugin_basename( __FILE__ ) ) ) {
@@ -226,17 +220,9 @@ class ES_ctypes {
 		if ( wp_is_post_revision( $postID ) || ( isset( $_POST['action'] ) && $_POST['action'] == 'autosave' ) ) {
 			return;
 		}
-		$config     = new Es_config();
-		$meta_boxes = isset( $config->data["meta_boxes"] ) ? $config->data["meta_boxes"] : array();
-		$languages  = ES_config::$languages;
-
-		$languages = ! empty( $languages ) ? $languages : array(
-			'ru_RU' => array(
-				'slug'    => 'ru',
-				'name'    => 'Русский',
-				'default' => 1
-			)
-		);
+		$config     = ES_Start::get_config();
+		$meta_boxes = isset( $config["meta_boxes"] ) ? $config["meta_boxes"] : array();
+		$languages  = ES_Start::get_languages();
 
 		if ( $meta_boxes ) {
 			foreach ( $meta_boxes as $metabox_id => $meta_box ) {
