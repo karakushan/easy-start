@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  * class ES_query		
  */
 
-class ES_query
+class ES_Query
 {
 	function __construct()
 	{

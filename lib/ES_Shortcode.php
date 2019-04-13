@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 /**
  * Es_config class
  */
-class ES_shortcode
+class ES_Shortcode
 {
     function __construct(){
         add_shortcode('es_terms',array($this,'es_terms_shortcode'));
