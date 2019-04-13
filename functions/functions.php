@@ -404,7 +404,7 @@ function es_options( $key, $args = array() ) {
 
 
 	if ( $args['echo'] == true ) {
-		echo esc_html( $options_value );
+		echo apply_filters( 'the_title', $options_value );
 	} else {
 		return $options_value;
 	}

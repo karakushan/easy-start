@@ -24,7 +24,7 @@ class ES_Start {
 		//Иннициализируем классы
 		new ES_Ctypes;
 		new ES_query;
-		new ES_taxonomies;
+		new ES_Taxonomies;
 		new ES_shortcode;
 	}
 

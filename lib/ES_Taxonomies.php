@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class Es_taxonomies
  */
-class Es_taxonomies {
+class ES_Taxonomies {
 
 	function __construct() {
 		add_action( 'init', array( $this, 'term_meta_create' ) );
@@ -18,7 +18,7 @@ class Es_taxonomies {
 	public function term_meta_create() {
 		$config     = ES_Start::get_config();
 		$term_meta  = $config['term_meta'];
-		$taxonomies = isset( $config->data["taxonomies"] ) ? $config->data["taxonomies"] : array();
+		$taxonomies = isset( $config["taxonomies"] ) ? $config["taxonomies"] : array();
 
 		//Если задано в настройках доп. поля таксономии то создаём их
 		if ( $term_meta ) {
