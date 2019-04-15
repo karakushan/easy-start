@@ -180,7 +180,7 @@ function es_term_meta( $key, $term_id = 0, $args = array() ) {
 	$args    = wp_parse_args( $args, array(
 		'type'     => 'text',
 		'default'  => '',
-		'raw'      => true,
+		'raw'      => false,
 		'echo'     => true,
 		'size'     => 'large',
 		'es_block' => 0
@@ -358,6 +358,7 @@ function es_post_meta( $meta_key, $post_id = 0, $args = array() ) {
  * @return string            название поля с префиксом
  */
 function es_field_prefix( $meta_key, $locale = '' ) {
+	$locale    = ! empty( $locale ) ? $locale : get_locale();
 	$languages = ES_Start::get_languages();
 	if ( empty( $languages[ $locale ]['default'] ) ) {
 		$meta_key = sprintf( '%s-%s', $meta_key, $locale );

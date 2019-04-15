@@ -16,35 +16,10 @@ class ES_Ctypes {
 		$config      = ES_Start::get_config();
 		$custom_post = isset( $config["custom_post"] ) ? $config["custom_post"] : array();
 
-		$args = array(
-			'label'               => __( 'Blocks', 'easy-start' ),
-			'labels'              => array(
-				'name'               => __( 'Blocks', 'easy-start' ),
-				// основное название для типа записи
-				'singular_name'      => __( 'Block', 'easy-start' ),
-				// название для одной записи этого типа
-				'add_new'            => __( 'Add Block', 'easy-start' ),
-				// для добавления новой записи
-				'add_new_item'       => __( 'Add Block', 'easy-start' ),
-				// заголовка у вновь создаваемой записи в админ-панели.
-				'edit_item'          => __( 'Edit Block', 'easy-start' ),
-				// для редактирования типа записи
-				'new_item'           => __( 'Block title', 'easy-start' ),
-				// текст новой записи
-				'view_item'          => __( 'View Block', 'easy-start' ),
-				// для просмотра записи этого типа.
-				'search_items'       => '',
-				// для поиска по этим типам записи
-				'not_found'          => '',
-				// если в результате поиска ничего не было найдено
-				'not_found_in_trash' => '',
-				// если не было найдено в корзине
-				'parent_item_colon'  => '',
-				// для родительских типов. для древовидных типов
-				'menu_name'          => __( 'Blocks', 'easy-start' ),
-				// название меню
-			),
-			'description'         => '',
+
+		register_post_type( 'es_blocks', array(
+			'label'               => __( 'Blocks', 'es-start' ),
+			'description'         => null,
 			'public'              => false,
 			'publicly_queryable'  => null,
 			'exclude_from_search' => null,
@@ -52,8 +27,8 @@ class ES_Ctypes {
 			'show_in_menu'        => true,
 			'menu_position'       => 62,
 			'menu_icon'           => null,
-			//'capability_type'   => 'post',
-			//'capabilities'      => 'post', // массив дополнительных прав для этого типа записи
+			'capability_type'   => 'post',
+			'capabilities'      => 'post', // массив дополнительных прав для этого типа записи
 			'map_meta_cap'        => true, // Ставим true чтобы включить дефолтный обработчик специальных прав
 			'hierarchical'        => false,
 			'supports'            => array( 'title', 'editor' ),
@@ -62,14 +37,38 @@ class ES_Ctypes {
 			'rewrite'             => true,
 			'query_var'           => true,
 			'show_in_nav_menus'   => null,
-		);
-
-		register_post_type( 'es_blocks', $args );
+		) );
 
 		//Регистрируем новые типы постов
 		if ( $custom_post ) {
-			foreach ( $custom_post as $key => $cpost ) {
-				register_post_type( $key, $cpost );
+			foreach ( $custom_post as $key => $custom_post ) {
+
+				$label       = ! empty( $custom_post['label'] ) ? $custom_post['label'] : $key;
+				$args        = array(
+					'label'               => $label,
+					'description'         => null,
+					'public'              => false,
+					'publicly_queryable'  => null,
+					'exclude_from_search' => null,
+					'show_ui'             => true,
+					'show_in_menu'        => true,
+					'menu_position'       => 62,
+					'menu_icon'           => null,
+					//'capability_type'   => 'post',
+					//'capabilities'      => 'post', // массив дополнительных прав для этого типа записи
+					'map_meta_cap'        => true, // Ставим true чтобы включить дефолтный обработчик специальных прав
+					'hierarchical'        => false,
+					'supports'            => array( 'title', 'editor' ),
+					'taxonomies'          => array(),
+					'has_archive'         => false,
+					'rewrite'             => true,
+					'query_var'           => true,
+					'show_in_rest'           => true,
+					'show_in_nav_menus'   => null,
+
+				);
+				$custom_post = wp_parse_args( $custom_post, $args );
+				register_post_type( $key, $custom_post );
 			}
 		}
 

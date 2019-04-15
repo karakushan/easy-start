@@ -32,6 +32,26 @@ class ES_Taxonomies {
 		//Если есть таксономии для регистрации, то создаём их
 		if ( $taxonomies ) {
 			foreach ( $taxonomies as $key => $taxonomy ) {
+				$taxonomy = wp_parse_args( $taxonomy, array(
+					'description'           => '',
+					'public'                => true,
+					'publicly_queryable'    => true,
+					'show_in_nav_menus'     => true,
+					'show_ui'               => true,
+					'show_in_menu'          => true,
+					'show_tagcloud'         => true,
+					'show_in_rest'          => true,
+					'rest_base'             => $key,
+					'hierarchical'          => false,
+					'update_count_callback' => '_update_post_term_count',
+					'rewrite'               => true,
+					'query_var'             => $key,
+					'capabilities'          => array(),
+					'meta_box_cb'           => null,
+					'show_admin_column'     => false,
+					'_builtin'              => false,
+					'show_in_quick_edit'    => null,
+				) );
 				register_taxonomy( $key, $taxonomy['post_types'], $taxonomy );
 			}
 		}
