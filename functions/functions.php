@@ -498,28 +498,3 @@ function es_parse_atts( $atts = array(), $prefix_data = false ) {
 
 	return $atts_text;
 }
-
-/**
- * функция возвращает текущие настройки из конфиг файла es-config.json
- * @return mixed
- */
-function es_get_config() {
-	$config = new \ES_LIB\ES_config();
-
-	return $config->data;
-}
-
-/**
- * Получает настройки мета поля
- *
- * @param $meta_box id метабокса
- * @param $post_meta ключ поля
- *
- * @return mixed
- */
-function es_get_config_post_meta( $meta_box = 0, $post_meta = '' ) {
-	$config    = new \ES_LIB\ES_config();
-	$post_meta = $config->data['meta_boxes'][ $meta_box ]['post_meta'][ $post_meta ];
-
-	return $post_meta;
-}

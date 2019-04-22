@@ -1,34 +1,32 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: karak
- * Date: 31.08.2016
- * Time: 0:53
- */
 
-function kv_customize_register( $wp_customize ) {
-  class ES_Date_Time_Customize_Control extends WP_Customize_Control{
-	  public function render_content() {
-		  ?>
-        <label>
-          <span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
-          <input type="datetime-local" <?php $this->link(); ?> value="<?php echo esc_html($this->value()) ?>">
-          <span class="description customize-control-description"><?php echo esc_html( $this->description ); ?></span>
-        </label>
-		  <?php
-	  }
-  }
-  class ES_Checkbox_Customize_Control extends WP_Customize_Control{
-	  public function render_content() {
-		  ?>
-        <label>
-          <span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
-          <input type="checkbox" <?php $this->link(); ?> value="1">
-          <span class="description customize-control-description"><?php echo esc_html( $this->description ); ?></span>
-        </label>
-		  <?php
-	  }
-  }
+use ES_LIB\ES_Start;
+
+function es_customize_register( $wp_customize ) {
+	class ES_Date_Time_Customize_Control extends WP_Customize_Control {
+		public function render_content() {
+			?>
+            <label>
+                <span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
+                <input type="datetime-local" <?php $this->link(); ?> value="<?php echo esc_html( $this->value() ) ?>">
+                <span class="description customize-control-description"><?php echo esc_html( $this->description ); ?></span>
+            </label>
+			<?php
+		}
+	}
+
+	class ES_Checkbox_Customize_Control extends WP_Customize_Control {
+		public function render_content() {
+			?>
+            <label>
+                <span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
+                <input type="checkbox" <?php $this->link(); ?> value="1">
+                <span class="description customize-control-description"><?php echo esc_html( $this->description ); ?></span>
+            </label>
+			<?php
+		}
+	}
+
 	class Example_Customize_Textarea_Control extends WP_Customize_Control {
 
 
@@ -36,20 +34,19 @@ function kv_customize_register( $wp_customize ) {
 
 		public function render_content() {
 			?>
-          <label>
-            <span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
-            <textarea rows="5"
-                      style="width:100%;" <?php $this->link(); ?>><?php echo esc_textarea( $this->value() ); ?></textarea>
-            <span class="description customize-control-description"><?php echo esc_html( $this->description ); ?></span>
-          </label>
+            <label>
+                <span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
+                <textarea rows="5"
+                          style="width:100%;" <?php $this->link(); ?>><?php echo esc_textarea( $this->value() ); ?></textarea>
+                <span class="description customize-control-description"><?php echo esc_html( $this->description ); ?></span>
+            </label>
 			<?php
 		}
 
 
 	}
 
-	$config   = new \ES_LIB\ES_config();
-	$settings = $config->data['customizer'];
+	$settings = ES_Start::get_config( 'customizer' );
 
 	if ( $settings ) {
 		foreach ( $settings as $key => $setting ) {
@@ -79,7 +76,7 @@ function kv_customize_register( $wp_customize ) {
 								'settings'    => $sek,
 							) ) );
 							break;
-							case 'checkbox':
+						case 'checkbox':
 							$wp_customize->add_control( new ES_Checkbox_Customize_Control( $wp_customize, $sek, array(
 								'label'       => $setting['name'],
 								'description' => $setting['description'],
@@ -161,4 +158,4 @@ function kv_customize_register( $wp_customize ) {
 	}
 }
 
-add_action( 'customize_register', 'kv_customize_register' );
+add_action( 'customize_register', 'es_customize_register' );
