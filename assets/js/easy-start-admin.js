@@ -67,11 +67,7 @@ jQuery(function ($) {
             // загрузка изображения
             if (button.attr("data-action") == "select-image") {
                 if (attachment.mime != "image/x-icon") {
-                    var url = attachment.url;
-                    if (Object.keys(attachment.sizes).length) {
-                        url = attachment.sizes.thumbnail.url;
-                    }
-                    buttonWrapper.find('.file img').attr('src', url);
+                    buttonWrapper.find('.file img').attr('src', attachment.url);
                     $(button).prev().val(attachment.id);
                 } else {
                     alert('Файл не является изображением');
