@@ -178,22 +178,28 @@ function es_term_meta( $key, $term_id = 0, $args = array() ) {
 	// Задаём id термина
 	$term_id = $term_id == 0 ? $wp_query->queried_object_id : (int) $term_id;
 	$args    = wp_parse_args( $args, array(
-		'type'     => 'text',
-		'default'  => '',
-		'raw'      => false,
-		'echo'     => true,
-		'size'     => 'large',
-		'es_block' => 0
+		'type'       => 'text',
+		'default'    => '',
+		'raw'        => false,
+		'echo'       => true,
+		'es_block'   => 0,
+		'return'     => null,
+		'size'       => 'thumbnail',
+		'image_atts' => []
 	) );
 
 	$lang_key = es_field_prefix( $key );
 
+
 	//отдаём данные в зависимости от параметра $type
 	switch ( $args['type'] ) {
 		case 'image':
-
-			$term_meta = wp_get_attachment_url( get_term_meta( $term_id, $lang_key, 1 ) );
-			$term_meta = empty( $term_meta ) ? wp_get_attachment_url( get_term_meta( $term_id, $key, 1 ) ) : $term_meta;
+			$meta_value = get_term_meta( $term_id, $lang_key, 1 );
+			if ( $meta_value && is_numeric( $meta_value ) ) {
+				$term_meta = $args['return'] == 'image'
+					? wp_get_attachment_image( $meta_value, $args['size'], false, $args['image_atts'] )
+					: wp_get_attachment_image_url( $meta_value, $args['size'], false, $args['image_atts'] );
+			}
 			break;
 		case "taxonomy":
 			$term_id      = get_term_meta( $term_id, $lang_key, 1 );
