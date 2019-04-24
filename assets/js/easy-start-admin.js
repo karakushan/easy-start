@@ -1,8 +1,30 @@
 jQuery(function ($) {
 
+    /* Возвращает шаблон мета поля с помощью AJAX */
+    function getTemplate(templateName, name, append) {
+        $.ajax({
+            type: 'POST',
+            url: ajaxurl,
+            data: {
+                "template": templateName,
+                "name": name,
+                "action": "es_get_template"
+            },
+            success: function (data) {
+                console.log(data);
+                if (data.success && data.data.template) {
+                    $(append).append(data.data.template);
+
+                }
+            }
+        });
+
+    }
+
     // Изменяет индекс секций слайдера при удалении или изменении порядка
     function slidesReIndex(slides) {
         slides.each(function (index, value) {
+
             var name = $(this).parent('.es-slides').data('name');
             var el = $(this);
             var c = index;
@@ -21,17 +43,30 @@ jQuery(function ($) {
             slidesReIndex(ui.item.parent().find('section'));
         }
     });
+
     // поле типа слайдер
     $(document).on('click', '[data-action="add-slide"]', function (event) {
         event.preventDefault();
-        var slidesWrap = $(this).parents('.es-slider-wrapper').find('.es-slides');
-        var name = slidesWrap.data('name');
+        let slidesWrap = $(this).parents('.es-slider-wrapper').find('.es-slides');
+        let name = slidesWrap.data('name');
+        // getTemplate('slider', name, slidesWrap);
 
-        var count = slidesWrap.find('section').length;
-        // console.log(count);
-        var cloneSect = slidesWrap.find('section').last().clone();
-        cloneSect.appendTo(slidesWrap);
-        slidesReIndex(slidesWrap.find('section'));
+        $.ajax({
+            type: 'POST',
+            url: ajaxurl,
+            data: {
+                "template": "slider",
+                "name": name,
+                "action": "es_get_template"
+            },
+            success: function (data) {
+                console.log(data);
+                if (data.success && data.data.template) {
+                    slidesWrap.append(data.data.template);
+                    slidesReIndex(slidesWrap.find('section'));
+                }
+            }
+        });
     });
 
     // удаление секции слайдера

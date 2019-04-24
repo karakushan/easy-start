@@ -12,24 +12,21 @@ class ES_Ctypes {
 		add_action( 'save_post', array( $this, 'es_post_save' ), 10, 2 );
 	}
 
+	/**
+	 * Регистрируем кастомные типы записей
+	 */
 	function es_post_types() {
-		$config      = ES_Start::get_config();
-		$custom_post = isset( $config["custom_post"] ) ? $config["custom_post"] : array();
 
-
+		// Регистрация типа записи "Блоки"
 		register_post_type( 'es_blocks', array(
-			'label'               => __( 'Blocks', 'es-start' ),
+			'label'               => __( 'Blocks', 'easy-start' ),
 			'description'         => null,
-			'public'              => false,
-			'publicly_queryable'  => null,
+			'public'              => true,
+			'publicly_queryable'  => false,
 			'exclude_from_search' => null,
 			'show_ui'             => true,
 			'show_in_menu'        => true,
-			'menu_position'       => 62,
-			'menu_icon'           => null,
-			'capability_type'   => 'post',
-			'capabilities'      => 'post', // массив дополнительных прав для этого типа записи
-			'map_meta_cap'        => true, // Ставим true чтобы включить дефолтный обработчик специальных прав
+			'menu_icon'           => 'dashicons-edit',
 			'hierarchical'        => false,
 			'supports'            => array( 'title', 'editor' ),
 			'taxonomies'          => array(),
@@ -37,94 +34,106 @@ class ES_Ctypes {
 			'rewrite'             => true,
 			'query_var'           => true,
 			'show_in_nav_menus'   => null,
+			'show_in_rest'        => true,
 		) );
-
-		//Регистрируем новые типы постов
-		if ( $custom_post ) {
-			foreach ( $custom_post as $key => $custom_post ) {
-
-				$label       = ! empty( $custom_post['label'] ) ? $custom_post['label'] : $key;
-				$args        = array(
-					'label'               => $label,
-					'description'         => null,
-					'public'              => false,
-					'publicly_queryable'  => null,
-					'exclude_from_search' => null,
-					'show_ui'             => true,
-					'show_in_menu'        => true,
-					'menu_position'       => 62,
-					'menu_icon'           => null,
-					//'capability_type'   => 'post',
-					//'capabilities'      => 'post', // массив дополнительных прав для этого типа записи
-					'map_meta_cap'        => true, // Ставим true чтобы включить дефолтный обработчик специальных прав
-					'hierarchical'        => false,
-					'supports'            => array( 'title', 'editor' ),
-					'taxonomies'          => array(),
-					'has_archive'         => false,
-					'rewrite'             => true,
-					'query_var'           => true,
-					'show_in_rest'           => true,
-					'show_in_nav_menus'   => null,
-
-				);
-				$custom_post = wp_parse_args( $custom_post, $args );
-				register_post_type( $key, $custom_post );
-			}
-		}
-
 
 		register_taxonomy( 'blocks_category', array( 'es_blocks' ), array(
 			'label'             => __( 'Categories blocks', 'easy-start' ),
 			'hierarchical'      => true,
 			'show_admin_column' => true,
 		) );
+
+
+		$custom_posts = ES_Start::get_config( 'custom_post' );
+
+		// Просто выходим из ф-ции если в конфиге нет новых типов постов
+		if ( empty( $custom_posts ) || ! is_array( $custom_posts ) ) {
+			return;
+		}
+
+		//Регистрируем новые типы записей из конфигурационного файла
+		foreach ( $custom_posts as $key => $custom_posts ) {
+			$args = array(
+				'label'               => ! empty( $custom_posts['label'] ) ? $custom_posts['label'] : $key,
+				'description'         => null,
+				'public'              => true,
+				'publicly_queryable'  => true,
+				'exclude_from_search' => false,
+				'show_ui'             => true,
+				'show_in_menu'        => true,
+				'menu_icon'           => null,
+				'map_meta_cap'        => true,
+				'hierarchical'        => false,
+				'supports'            => array( 'title', 'editor' ),
+				'taxonomies'          => array(),
+				'has_archive'         => false,
+				'rewrite'             => true,
+				'query_var'           => true,
+				'show_in_rest'        => true,
+				'show_in_nav_menus'   => true,
+
+			);
+			register_post_type( $key, wp_parse_args( $custom_posts, $args ) );
+		}
+
+
 	}
 
+	/**
+	 * Отвечает за регистрацию метабоксов
+	 */
 	function es_post_metaboxes() {
 		global $post;
-		$config = ES_Start::get_config();
 
+		$meta_boxes = ES_Start::get_config( 'meta_boxes' );
 
-		$meta_boxes = isset( $config["meta_boxes"] ) ? $config["meta_boxes"] : array();
+		if ( empty( $meta_boxes ) || ! is_array( $meta_boxes ) ) {
+			return;
+		}
 
 		//Добавляем метабокс
-		if ( $meta_boxes ) {
-			foreach ( $meta_boxes as $key => $meta_box ) {
-				//=== НАЧАЛО ПРОВЕРОК ПО УСЛОВИЮ  === //
-				// проверяем свойство "display" если оно пустое, равно 0 или false , то выходим из цикла
-				if ( empty( $meta_box['display'] ) ) {
+		foreach ( $meta_boxes as $key => $meta_box ) {
+			//=== НАЧАЛО ПРОВЕРОК ПО УСЛОВИЮ  === //
+			// проверяем свойство "display" если оно пустое, равно 0 или false , то выходим из цикла
+			if ( empty( $meta_box['display'] ) ) {
+				continue;
+			}
+			// если указано условие "template" (шаблон) и оно является массивом
+			if ( ! empty( $meta_box['condition'] ['template'] ) ) {
+				// если шаблон текущей страницы не входит в массив указанных в условии то выходим из цикла
+				if ( is_array( $meta_box['condition']['template'] ) && ! in_array( get_page_template_slug( $post->ID ), $meta_box['condition'] ['template'] ) ) {
 					continue;
 				}
-				// если указано условие "template" (шаблон) и оно является массивом
-				if ( ! empty( $meta_box['condition'] ['template'] ) ) {
-					// если шаблон текущей страницы не входит в массив указанных в условии то выходим из цикла
-					if ( is_array( $meta_box['condition']['template'] ) && ! in_array( get_page_template_slug( $post->ID ), $meta_box['condition'] ['template'] ) ) {
-						continue;
-					}
-				}
-				// если указано условие "post_id" (ID страницы, поста) и оно является массивом
-				if ( ! empty( $meta_box['condition']['post_id'] ) ) {
-					// если ID текущего поста не входит  в массив ID указанных в условии, то выходим из цикла
-					if ( is_array( $meta_box['condition']['post_id'] ) && ! in_array( $post->ID, $meta_box['condition']['post_id'] ) ) {
-						continue;
-						// если в качестве аргумента указано число а не массив и оно не равно номеру поста, то выходим из цикла
-					} elseif ( is_numeric( $meta_box['condition']['post_id'] ) && $meta_box['condition']['post_id'] != $post->ID ) {
-						continue;
-					}
-				}
-				// Добавляем метабокс
-				add_meta_box(
-					'es_meta_box_' . $key,
-					$meta_box['name'],
-					array( $this, 'es_meta_block' ),
-					$meta_box['post_types'],
-					'normal',
-					'high', array( 'box_num' => $key, 'post_meta' => $meta_box['post_meta'], 'meta_box' => $meta_box )
-				);
 			}
+			// если указано условие "post_id" (ID страницы, поста) и оно является массивом
+			if ( ! empty( $meta_box['condition']['post_id'] ) ) {
+				// если ID текущего поста не входит  в массив ID указанных в условии, то выходим из цикла
+				if ( is_array( $meta_box['condition']['post_id'] ) && ! in_array( $post->ID, $meta_box['condition']['post_id'] ) ) {
+					continue;
+					// если в качестве аргумента указано число а не массив и оно не равно номеру поста, то выходим из цикла
+				} elseif ( is_numeric( $meta_box['condition']['post_id'] ) && $meta_box['condition']['post_id'] != $post->ID ) {
+					continue;
+				}
+			}
+			// Добавляем метабокс
+			add_meta_box(
+				'es_meta_box_' . $key,
+				$meta_box['name'],
+				array( $this, 'es_meta_block' ),
+				$meta_box['post_types'],
+				'normal',
+				'high', array( 'box_num' => $key, 'post_meta' => $meta_box['post_meta'], 'meta_box' => $meta_box )
+			);
 		}
+
 	}
 
+	/**
+	 * Отвечает за вывод метабокса вместе с доп. полями
+	 *
+	 * @param $post
+	 * @param $callback
+	 */
 	function es_meta_block( $post, $callback ) {
 		$meta_fields = $callback['args']['post_meta'];
 		$box_num     = $callback['args']['box_num'];
@@ -184,6 +193,7 @@ class ES_Ctypes {
 								'text'  => array( 'type' => 'textarea', 'name' => __( 'Text', 'easy-start' ) )
 							);
 						}
+
 
 						es_field_template( $field['type'], $field_name, $content, $field );
 						if ( ! empty( $field['after'] ) ) {

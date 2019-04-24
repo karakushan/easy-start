@@ -20,12 +20,59 @@ class ES_Start {
 		add_action( 'wp_ajax_es_get_blocks', array( $this, 'get_tinymce_blocks' ) );
 		add_action( 'wp_ajax_nopriv_es_get_blocks', array( $this, 'get_tinymce_blocks' ) );
 
+		add_action( 'wp_ajax_es_get_template', array( $this, 'ajax_get_template' ) );
+		add_action( 'wp_ajax_nopriv_es_get_template', array( $this, 'ajax_get_template' ) );
+
 
 		//Иннициализируем классы
 		new ES_Ctypes;
 		new ES_Query;
 		new ES_Taxonomies;
 		new ES_Shortcode;
+	}
+
+	/**
+	 * Возврашает шаблон метаполя
+	 */
+	function ajax_get_template() {
+		$loader        = new \Twig\Loader\FilesystemLoader( ES_DIR_PATH . 'templates/twig' );
+		$twig          = new \Twig\Environment( $loader, [
+			'cache'       => ES_DIR_PATH . 'templates/cache',
+			'auto_reload' => true
+		] );
+		$template_name = $_POST['template'];
+		$field_name    = $_POST['name'];
+		$field         = [];
+		$template      = '';
+
+		// Прессет поля типа слайдер
+		if ( $template_name == 'slider' ) {
+			$field['type']   = 'multiple';
+			$field['fields'] = array(
+				'image' => array( 'type' => 'image', 'name' => __( 'Image', 'easy-start' ) ),
+				'text'  => array( 'type' => 'textarea', 'name' => __( 'Text', 'easy-start' ) ),
+				'link'  => array( 'type' => 'text', 'name' => __( 'Link', 'easy-start' ), )
+			);
+
+			ob_start();
+			echo '<div class="sub-field full">';
+			foreach ( $field['fields'] as $key => $field ) {
+				$field['placeholder'] = $field['name'];
+				es_field_template( $field['type'], $key, '', $field );
+			}
+			echo '</div>';
+			$subfields = ob_get_clean();
+			$template  = $twig->render( 'multiple.html', [
+				'index'     => 0,
+				'name'      => $field_name,
+				'subfields' => $subfields
+			] );
+		}
+
+		if ( $template ) {
+			wp_send_json_success( [ 'template' => $template ] );
+		}
+		wp_send_json_error( [ 'msg' => __( 'I can not get a template', 'easy-start' ) ] );
 	}
 
 	/**

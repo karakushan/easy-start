@@ -252,7 +252,6 @@ function es_term_meta( $key, $term_id = 0, $args = array() ) {
  * @return string $post_meta - обработтаное значение поля
  */
 function es_post_meta( $meta_key, $post_id = 0, $args = array() ) {
-	// Задаём id поста если не указан параметр $post_id
 	global $post;
 	$post_id = empty( $post_id ) ? $post->ID : (int) $post_id;
 
@@ -455,7 +454,9 @@ function es_field_template( $type = 'text', $name, $value, $args = array() ) {
 			break;
 	}
 	if ( file_exists( $template ) ) {
+		echo '<div class="es-field-wrapper">';
 		include $template;
+		echo '</div>';
 	}
 }
 

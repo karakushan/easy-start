@@ -1,0 +1,12 @@
+<section data-index="{{ index }}" data-name="{{ name }}">
+    <header>
+        <span class="dashicons dashicons-plus" data-action="open-section"></span>
+        <span class="count">{{ index }}</span>
+        <input name="easy[{{ name }}][{{ index }}][title]" class="title"
+               placeholder="{{ placeholder }}" value="{{ title }}">
+        <span class="dashicons dashicons-dismiss" data-action="remove-section"></span>
+    </header>
+    <div class="bottom">
+        {{ subfields|raw }}
+    </div>
+</section>
