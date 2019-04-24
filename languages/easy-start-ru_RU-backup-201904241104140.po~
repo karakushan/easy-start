@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Easy start\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-24 11:03+0000\n"
-"PO-Revision-Date: 2019-04-24 11:04+0000\n"
+"POT-Creation-Date: 2019-04-23 16:11+0000\n"
+"PO-Revision-Date: 2019-04-23 16:12+0000\n"
 "Last-Translator: apple-admin <karakushan@gmail.com>\n"
 "Language-Team: Русский\n"
 "Language: ru_RU\n"
@@ -24,37 +24,33 @@ msgstr ""
 "X-Loco-Target-Locale: ru_RU\n"
 "X-Loco-Version: 2.2.2; wp-5.1.1"
 
-#: lib/ES_Start.php:52 lib/ES_Taxonomies.php:111 lib/ES_Ctypes.php:185
-msgid "Image"
-msgstr "Изображение"
-
-#: lib/ES_Start.php:53 lib/ES_Taxonomies.php:112 lib/ES_Taxonomies.php:119
-#: lib/ES_Ctypes.php:186 lib/ES_Ctypes.php:193
-msgid "Text"
-msgstr "Текст"
-
-#: lib/ES_Start.php:54 lib/ES_Taxonomies.php:113 lib/ES_Ctypes.php:187
-msgid "Link"
-msgstr "Ссылка"
-
-#: lib/ES_Start.php:75
-msgid "I can not get a template"
-msgstr "Не могу получить шаблон"
-
-#: lib/ES_Start.php:136 templates/easy-start-import-export.php:2
+#: lib/ES_Start.php:89 templates/easy-start-import-export.php:2
 msgid "Export"
 msgstr "Экспорт"
 
-#: lib/ES_Taxonomies.php:110 lib/ES_Taxonomies.php:118 lib/ES_Ctypes.php:184
-#: lib/ES_Ctypes.php:192 templates/field/multiple.php:3
+#: lib/ES_Taxonomies.php:110 lib/ES_Taxonomies.php:118 lib/ES_Ctypes.php:171
+#: lib/ES_Ctypes.php:179 templates/field/multiple.php:3
 msgid "Title"
-msgstr "Заголовок"
+msgstr ""
 
-#: lib/ES_Ctypes.php:22
+#: lib/ES_Taxonomies.php:111 lib/ES_Ctypes.php:172
+msgid "Image"
+msgstr ""
+
+#: lib/ES_Taxonomies.php:112 lib/ES_Taxonomies.php:119 lib/ES_Ctypes.php:173
+#: lib/ES_Ctypes.php:180
+msgid "Text"
+msgstr ""
+
+#: lib/ES_Taxonomies.php:113 lib/ES_Ctypes.php:174
+msgid "Link"
+msgstr ""
+
+#: lib/ES_Ctypes.php:20
 msgid "Blocks"
 msgstr "Блоки"
 
-#: lib/ES_Ctypes.php:41
+#: lib/ES_Ctypes.php:73
 msgid "Categories blocks"
 msgstr "Категории блоков"
 
@@ -62,7 +58,7 @@ msgstr "Категории блоков"
 msgid "edit block"
 msgstr "изменить блок"
 
-#: functions/functions.php:443
+#: functions/functions.php:444
 msgid "Please Select"
 msgstr "Выберите пожалуйста"
 
@@ -100,7 +96,7 @@ msgstr "Добавить"
 
 #. Name of the plugin
 msgid "Easy start"
-msgstr "Легкий старт"
+msgstr ""
 
 #. Description of the plugin
 msgid ""
@@ -116,4 +112,4 @@ msgstr ""
 
 #. Author of the plugin
 msgid "Vitaliy Karakushan"
-msgstr "Виталий Каракушан"
+msgstr ""

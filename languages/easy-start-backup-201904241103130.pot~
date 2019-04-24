@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Easy start\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-24 11:03+0000\n"
+"POT-Creation-Date: 2019-04-23 16:11+0000\n"
 "POT-Revision-Date: Mon Aug 22 2016 11:54:56 GMT+0300 (RTZ 2 (зима))\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
@@ -23,37 +23,33 @@ msgstr ""
 "esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
 "X-Generator: Loco https://localise.biz/"
 
-#: lib/ES_Start.php:52 lib/ES_Taxonomies.php:111 lib/ES_Ctypes.php:185
-msgid "Image"
-msgstr ""
-
-#: lib/ES_Start.php:53 lib/ES_Taxonomies.php:112 lib/ES_Taxonomies.php:119
-#: lib/ES_Ctypes.php:186 lib/ES_Ctypes.php:193
-msgid "Text"
-msgstr ""
-
-#: lib/ES_Start.php:54 lib/ES_Taxonomies.php:113 lib/ES_Ctypes.php:187
-msgid "Link"
-msgstr ""
-
-#: lib/ES_Start.php:75
-msgid "I can not get a template"
-msgstr ""
-
-#: lib/ES_Start.php:136 templates/easy-start-import-export.php:2
+#: lib/ES_Start.php:89 templates/easy-start-import-export.php:2
 msgid "Export"
 msgstr ""
 
-#: lib/ES_Taxonomies.php:110 lib/ES_Taxonomies.php:118 lib/ES_Ctypes.php:184
-#: lib/ES_Ctypes.php:192 templates/field/multiple.php:3
+#: lib/ES_Taxonomies.php:110 lib/ES_Taxonomies.php:118 lib/ES_Ctypes.php:171
+#: lib/ES_Ctypes.php:179 templates/field/multiple.php:3
 msgid "Title"
 msgstr ""
 
-#: lib/ES_Ctypes.php:22
+#: lib/ES_Taxonomies.php:111 lib/ES_Ctypes.php:172
+msgid "Image"
+msgstr ""
+
+#: lib/ES_Taxonomies.php:112 lib/ES_Taxonomies.php:119 lib/ES_Ctypes.php:173
+#: lib/ES_Ctypes.php:180
+msgid "Text"
+msgstr ""
+
+#: lib/ES_Taxonomies.php:113 lib/ES_Ctypes.php:174
+msgid "Link"
+msgstr ""
+
+#: lib/ES_Ctypes.php:20
 msgid "Blocks"
 msgstr ""
 
-#: lib/ES_Ctypes.php:41
+#: lib/ES_Ctypes.php:73
 msgid "Categories blocks"
 msgstr ""
 
@@ -61,7 +57,7 @@ msgstr ""
 msgid "edit block"
 msgstr ""
 
-#: functions/functions.php:443
+#: functions/functions.php:444
 msgid "Please Select"
 msgstr ""
 
