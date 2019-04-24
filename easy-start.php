@@ -1,6 +1,6 @@
 <?php
 /*
-   Plugin Name: Easy start
+   Plugin Name: Easy Start
    Plugin URI: http://wordpress.org/extend/plugins/easy-start/
    Version: 0.1
    Author: Vitaliy Karakushan
