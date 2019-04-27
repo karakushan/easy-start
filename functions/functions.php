@@ -15,9 +15,9 @@ use ES_LIB\ES_Start;
  */
 function es_block( $block_id = 0, $args = array() ) {
 	$args = wp_parse_args( $args, array(
-		'type'   => 'text',
-		'class'  => 'es-block',
-		'filter' => 'the_content'
+		'type'  => 'text',
+		'class' => 'es-block',
+		'raw'   => false
 	) );
 
 	$es_post = get_post( $block_id, OBJECT, 'display' );
@@ -45,8 +45,9 @@ function es_block( $block_id = 0, $args = array() ) {
 
 	$content = sanitize_post_field( 'post_content', $es_post->post_content, $block_id, 'display' );
 
-	if ( $args['filter'] ) {
-		$content = apply_filters( $args['filter'], $content );
+
+	if ( ! $args['raw'] ) {
+		$content = apply_filters( 'the_content', $content );
 	}
 
 	echo $content;
