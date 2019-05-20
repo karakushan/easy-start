@@ -175,10 +175,11 @@ function es_transliteration( $str ) {
  * @return [string]          -   строковое значение мета поля
  */
 function es_term_meta( $key, $term_id = 0, $args = array() ) {
-	global $wp_query;
-	// Задаём id термина
-	$term_id = $term_id == 0 ? $wp_query->queried_object_id : (int) $term_id;
-	$args    = wp_parse_args( $args, array(
+	// Устанавливаем id термина или вытачкиваем из глобальной $wp_query
+	$term_id = $term_id == 0 && is_tax() ? get_queried_object_id() : intval( $term_id );
+
+	// Устанавливаем аргументы по умолчанию
+	$args = wp_parse_args( $args, array(
 		'type'       => 'text',
 		'default'    => '',
 		'raw'        => false,
@@ -189,55 +190,66 @@ function es_term_meta( $key, $term_id = 0, $args = array() ) {
 		'image_atts' => []
 	) );
 
+	// Добавляем префикс языка
 	$lang_key = es_field_prefix( $key );
 
+	// Тип значений которые будем получать: 1 - текст, 0 - массив
+	$meta_type = ! in_array( $args['type'], array( 'gallery' ) ) ? 1 : 0;
 
-	//отдаём данные в зависимости от параметра $type
+	// Получаем чистое значение мета поля
+	$meta_value = get_term_meta( $term_id, $lang_key, $meta_type );
+
+	// Если нет значения для текущей локали, то возвращаем для локали по умолчанию, т.е. без префикса языка
+	if ( empty( $meta_value ) ) {
+		$meta_value = get_term_meta( $term_id, $key, $meta_type );
+	}
+
+	// Если нет значений, выходим
+	if ( empty( $meta_value ) ) {
+		return;
+	}
+
+	// Если значение массив, убираем 0 индекс
+	if ( $meta_type == 0 && is_array( $meta_value ) ) {
+		array_shift( $meta_value );
+	}
+
+	//отдаём значение в зависимости от параметра $type
 	switch ( $args['type'] ) {
 		case 'image':
-			$meta_value = get_term_meta( $term_id, $lang_key, 1 );
-			if ( $meta_value && is_numeric( $meta_value ) ) {
-				$term_meta = $args['return'] == 'image'
-					? wp_get_attachment_image( $meta_value, $args['size'], false, $args['image_atts'] )
-					: wp_get_attachment_image_url( $meta_value, $args['size'], false, $args['image_atts'] );
+			if ( ! is_numeric( $meta_value ) ) {
+				return;
 			}
+			$meta_value = $args['return'] == 'image'
+				? wp_get_attachment_image( $meta_value, $args['size'], false, $args['image_atts'] )
+				: wp_get_attachment_image_url( $meta_value, $args['size'], false, $args['image_atts'] );
+
 			break;
 		case "taxonomy":
-			$term_id      = get_term_meta( $term_id, $lang_key, 1 );
-			$term_meta    = get_term_by( 'term_taxonomy_id', $term_id );
+			$meta_value   = get_term_by( 'term_taxonomy_id', $meta_value );
 			$args['echo'] = false;
 			break;
 		case "gallery":
-			$post_meta      = get_term_meta( $term_id, $lang_key, 0 );
-			$gallery_images = ! empty( $post_meta[0] ) ? $post_meta[0] : array();
-			$meta_img       = array();
+			$gallery_images = $meta_value;
 			foreach ( $gallery_images as $k => $images ) {
-				$meta_img[ $k ] = wp_get_attachment_image_url( $images, $args['size'] );
+				$meta_value[ $k ] = wp_get_attachment_image_url( $images, $args['size'] );
 			}
-			$term_meta    = $meta_img;
 			$args['echo'] = 0;
-			break;
-		default:
-			$term_meta = get_term_meta( $term_id, $lang_key, 1 );
-			$term_meta = empty( $term_meta ) ? get_term_meta( $term_id, $key, 1 ) : $term_meta;
-			if ( ! $args['raw'] ) {
-				$term_meta = apply_filters( 'the_content', $term_meta );
-			}
 			break;
 	}
 	//Если пустое значение мета поля или равно false возвращаем значение заданное в $default
-	if ( empty( $term_meta ) ) {
+	if ( empty( $meta_value ) ) {
 		if ( $args['default'] == 'es_block' ) {
-			$term_meta = es_get_block( $args['es_block'] );
+			$meta_value = es_get_block( $args['es_block'] );
 		} else {
-			$term_meta = $args['default'];
+			$meta_value = $args['default'];
 		}
 
 	}
 	if ( $args['echo'] ) {
-		echo $term_meta;
+		echo $meta_value;
 	} else {
-		return $term_meta;
+		return $meta_value;
 	}
 
 
